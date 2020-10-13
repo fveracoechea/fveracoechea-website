@@ -1,10 +1,11 @@
-import Url from './Url';
+import Url from '../Url';
 import * as TE from 'fp-ts/lib/TaskEither';
 import { pipe } from 'fp-ts/lib/pipeable';
 import * as t from 'io-ts';
 import * as E from 'fp-ts/lib/Either';
-import { SucessResponse, ErrorResponse, HttpError } from '../types/Directus';
-import { decodeWith, setError, toErrorResponse } from './decode';
+import { SucessResponse, ErrorResponse, HttpError } from '../../types/Directus';
+import { decodeWith, setHttpError, toErrorResponse } from '../decode';
+
 
 const request = <T>(url: string, body: T, method = 'GET') => {
   return fetch(url, {
@@ -29,7 +30,7 @@ const httpPost = <A>(url: string, body: A) => TE.tryCatch(
   error => pipe(
     ErrorResponse.decode(error),
     E.fold(
-      setError,
+      setHttpError,
       ({ error }) => new HttpError(error.message, error.code)
     )
   )

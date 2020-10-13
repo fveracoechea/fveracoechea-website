@@ -2,6 +2,13 @@ import * as t from 'io-ts';
 // import { option } from 'io-ts-types/lib/option';
 import { JWTString, EmailString } from './IO';
 
+export enum RequestMethods {
+  POST = 'POST',
+  GET = 'GET',
+  PUT = ' PUT',
+  DELETE = 'DELETE',
+}
+
 
 export const AuthenticateRequest = t.type({
   email: EmailString,
@@ -14,7 +21,6 @@ export const RefreshRequest = t.type({
   token: JWTString,
 });
 export type RefreshRequest = t.TypeOf<typeof RefreshRequest>;
-
 
 
 export const SucessResponse = t.type({

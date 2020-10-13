@@ -24,12 +24,22 @@ export const toErrorResponse = (
     }
   });
 
-export const setError = errors => new HttpError(failure(errors).join('\n'));
+export const toAuthError = (
+  error: Error | { message: string, code: number, success: boolean }
+) => error instanceof Error
+  ? Promise.reject({
+    message: error.message,
+    code: 0,
+    success: false,
+  })
+  : Promise.reject(error);
+
+export const setHttpError = errors => new HttpError(failure(errors).join(', '));
 
 //function to decode an unknown into an A
 export const decodeWith = <A>(decoder: t.Decoder<unknown, A>) => (data: unknown) => pipe(
   decoder.decode(data),
   E.mapLeft(formatValidationErrors),
-  E.mapLeft(errors => new HttpError(errors.join(', \n'))),
+  E.mapLeft(errors => new HttpError(errors.join(', '))),
   TE.fromEither
 );

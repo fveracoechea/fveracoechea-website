@@ -1,8 +1,15 @@
-// import App from "next/app";
-import type { AppProps /*, AppContext */ } from 'next/app'
+import type { AppProps } from 'next/app';
+import { ApolloProvider } from '@apollo/client';
+import { createApolloClient } from '../utils/apolloClient';
 
 function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+  const client = createApolloClient();
+
+  return (
+    <ApolloProvider client={client}>
+      <Component {...pageProps} />
+    </ApolloProvider>
+  )
 }
 
 // Only uncomment this method if you have blocking data requirements for

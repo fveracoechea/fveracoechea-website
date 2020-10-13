@@ -1,0 +1,10 @@
+query Interest {
+  interests {
+    data {
+      id
+      name
+      icon
+      description
+    }
+  }
+}
