@@ -37,7 +37,7 @@ const httpPost = <A>(url: string, body: A) => TE.tryCatch(
 );
 
 export const authRequest = <A>(path: string, body: A, decoder: t.Decoder<unknown, A>) => {
-  const url = Url.concat(process.env.DIRECTUS_BASE_URL, path);
+  const url = Url.concat(process.env.DIRECTUS_BASE_URL!, path);
   return pipe(
     decodeWith(decoder)(body),
     TE.chain(b => httpPost(url, b)),

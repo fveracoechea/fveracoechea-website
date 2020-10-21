@@ -1,45 +1,50 @@
-import { gql } from '@apollo/client';
 import Head from 'next/head'
-import { useInterestQuery } from '../graphql/index';
+import { FC } from 'react';
+import { MainSectionQuery, MainSectionDocument } from '../graphql/index';
+import MainSection from '../components/MainSection';
 import { createApolloClient } from '../utils/apolloClient';
+import * as T from 'fp-ts/lib/Task';
+import { pipe } from 'fp-ts/lib/pipeable';
+import { ApolloClient } from '@apollo/client';
 
-export default function Home({ data }) {
-  // const { data, loading } = useInterestQuery();
-  return (
-    <div>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <main>
-        <h1>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-        <pre>{JSON.stringify(data, null, 2)}</pre>
-      </main>
-    </div>
-  )
-}
+const fetchMainQuery = (apollo: ApolloClient<any>) => () => apollo.query<MainSectionQuery>({
+  query: MainSectionDocument
+});
 
-export async function getStaticProps() {
-  const apollo = createApolloClient();
-  const { data } = await apollo.query({
-    query: gql`
-      query Interest {
-        interests {
-          data {
-            id
-            name
-            icon
-            description
-          }
-        }
-      }
-    `
-  })
-  return {
+export const getServerSideProps = () => pipe(
+  T.of(createApolloClient()),
+  T.chain(fetchMainQuery),
+  T.map(({ data }) => ({
     props: {
       data,
     },
-  }
+  }))
+)()
+
+type Props = {
+  data: MainSectionQuery
 }
+
+const Home: FC<Props> = ({ data }) => {
+  return (
+    <>
+      <Head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta charSet="UTF-8"/>
+        <title>Francisco Veracoechea - Web Developer</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <style global jsx>{`
+        * {
+          padding: 0;
+          margin: 0;
+          box-sizing: border-box;
+        }
+      `}</style>
+      <MainSection data={data} />
+    </>
+  )
+}
+
+export default Home;

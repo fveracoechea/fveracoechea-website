@@ -1227,6 +1227,60 @@ export type InterestsItem = {
 };
 
 
+export type Main = {
+  __typename?: 'Main';
+  data?: Maybe<Array<Maybe<MainItem>>>;
+  meta?: Maybe<Metadata>;
+};
+
+export type MainFilter = {
+  id_eq?: Maybe<Scalars['Int']>;
+  id_neq?: Maybe<Scalars['Int']>;
+  id_lt?: Maybe<Scalars['Int']>;
+  id_lte?: Maybe<Scalars['Int']>;
+  id_gt?: Maybe<Scalars['Int']>;
+  id_gte?: Maybe<Scalars['Int']>;
+  id_in?: Maybe<Scalars['String']>;
+  id_nin?: Maybe<Scalars['String']>;
+  id_between?: Maybe<Scalars['String']>;
+  id_nbetween?: Maybe<Scalars['String']>;
+  title_eq?: Maybe<Scalars['String']>;
+  title_neq?: Maybe<Scalars['String']>;
+  title_contains?: Maybe<Scalars['String']>;
+  title_ncontains?: Maybe<Scalars['String']>;
+  title_rlike?: Maybe<Scalars['String']>;
+  title_nrlike?: Maybe<Scalars['String']>;
+  title_empty?: Maybe<Scalars['String']>;
+  title_nempty?: Maybe<Scalars['String']>;
+  title_null?: Maybe<Scalars['String']>;
+  title_nnull?: Maybe<Scalars['String']>;
+  subtitle_eq?: Maybe<Scalars['String']>;
+  subtitle_neq?: Maybe<Scalars['String']>;
+  subtitle_contains?: Maybe<Scalars['String']>;
+  subtitle_ncontains?: Maybe<Scalars['String']>;
+  subtitle_rlike?: Maybe<Scalars['String']>;
+  subtitle_nrlike?: Maybe<Scalars['String']>;
+  subtitle_empty?: Maybe<Scalars['String']>;
+  subtitle_nempty?: Maybe<Scalars['String']>;
+  subtitle_null?: Maybe<Scalars['String']>;
+  subtitle_nnull?: Maybe<Scalars['String']>;
+  social_all?: Maybe<Scalars['String']>;
+  social_has?: Maybe<Scalars['String']>;
+  background_image_all?: Maybe<Scalars['String']>;
+  background_image_has?: Maybe<Scalars['String']>;
+  or?: Maybe<Array<Maybe<MainFilter>>>;
+  and?: Maybe<Array<Maybe<MainFilter>>>;
+};
+
+export type MainItem = {
+  __typename?: 'MainItem';
+  id: Scalars['ID'];
+  title: Scalars['String'];
+  subtitle: Scalars['String'];
+  social: Scalars['JSON'];
+  background_image?: Maybe<DirectusFileItem>;
+};
+
 export type Metadata = {
   __typename?: 'Metadata';
   collection?: Maybe<Scalars['String']>;
@@ -1253,6 +1307,7 @@ export type Query = {
   contact?: Maybe<Contact>;
   information?: Maybe<Information>;
   interests?: Maybe<Interests>;
+  main?: Maybe<Main>;
   skills?: Maybe<Skills>;
 };
 
@@ -1383,6 +1438,15 @@ export type QueryInterestsArgs = {
 };
 
 
+export type QueryMainArgs = {
+  id?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  lang?: Maybe<Scalars['String']>;
+  filter?: Maybe<MainFilter>;
+};
+
+
 export type QuerySkillsArgs = {
   id?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
@@ -1478,6 +1542,24 @@ export type InterestQuery = (
   )> }
 );
 
+export type MainSectionQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MainSectionQuery = (
+  { __typename?: 'Query' }
+  & { main?: Maybe<(
+    { __typename?: 'Main' }
+    & { data?: Maybe<Array<Maybe<(
+      { __typename?: 'MainItem' }
+      & Pick<MainItem, 'id' | 'title' | 'subtitle'>
+      & { background_image?: Maybe<(
+        { __typename?: 'DirectusFileItem' }
+        & Pick<DirectusFileItem, 'full_url'>
+      )> }
+    )>>> }
+  )> }
+);
+
 
 export const InterestDocument = gql`
     query Interest {
@@ -1516,6 +1598,45 @@ export function useInterestLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<I
 export type InterestQueryHookResult = ReturnType<typeof useInterestQuery>;
 export type InterestLazyQueryHookResult = ReturnType<typeof useInterestLazyQuery>;
 export type InterestQueryResult = Apollo.QueryResult<InterestQuery, InterestQueryVariables>;
+export const MainSectionDocument = gql`
+    query MainSection {
+  main {
+    data {
+      id
+      title
+      subtitle
+      background_image {
+        full_url
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useMainSectionQuery__
+ *
+ * To run a query within a React component, call `useMainSectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMainSectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMainSectionQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMainSectionQuery(baseOptions?: Apollo.QueryHookOptions<MainSectionQuery, MainSectionQueryVariables>) {
+        return Apollo.useQuery<MainSectionQuery, MainSectionQueryVariables>(MainSectionDocument, baseOptions);
+      }
+export function useMainSectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MainSectionQuery, MainSectionQueryVariables>) {
+          return Apollo.useLazyQuery<MainSectionQuery, MainSectionQueryVariables>(MainSectionDocument, baseOptions);
+        }
+export type MainSectionQueryHookResult = ReturnType<typeof useMainSectionQuery>;
+export type MainSectionLazyQueryHookResult = ReturnType<typeof useMainSectionLazyQuery>;
+export type MainSectionQueryResult = Apollo.QueryResult<MainSectionQuery, MainSectionQueryVariables>;
 
       export interface IntrospectionResultData {
         __schema: {

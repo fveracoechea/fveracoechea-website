@@ -1,4 +1,3 @@
-
 type AboutMe {
   data: [AboutMeItem]
   meta: Metadata
@@ -1182,6 +1181,58 @@ The `JSON` scalar type represents JSON values as specified by
 """
 scalar JSON
 
+type Main {
+  data: [MainItem]
+  meta: Metadata
+}
+
+input MainFilter {
+  id_eq: Int
+  id_neq: Int
+  id_lt: Int
+  id_lte: Int
+  id_gt: Int
+  id_gte: Int
+  id_in: String
+  id_nin: String
+  id_between: String
+  id_nbetween: String
+  title_eq: String
+  title_neq: String
+  title_contains: String
+  title_ncontains: String
+  title_rlike: String
+  title_nrlike: String
+  title_empty: String
+  title_nempty: String
+  title_null: String
+  title_nnull: String
+  subtitle_eq: String
+  subtitle_neq: String
+  subtitle_contains: String
+  subtitle_ncontains: String
+  subtitle_rlike: String
+  subtitle_nrlike: String
+  subtitle_empty: String
+  subtitle_nempty: String
+  subtitle_null: String
+  subtitle_nnull: String
+  social_all: String
+  social_has: String
+  background_image_all: String
+  background_image_has: String
+  or: [MainFilter]
+  and: [MainFilter]
+}
+
+type MainItem {
+  id: ID!
+  title: String!
+  subtitle: String!
+  social: JSON!
+  background_image: DirectusFileItem
+}
+
 type Metadata {
   collection: String
   type: String
@@ -1210,6 +1261,7 @@ type Query {
   contact(id: Int, limit: Int, offset: Int, lang: String, filter: ContactFilter): Contact
   information(id: Int, limit: Int, offset: Int, lang: String, filter: InformationFilter): Information
   interests(id: Int, limit: Int, offset: Int, lang: String, filter: InterestsFilter): Interests
+  main(id: Int, limit: Int, offset: Int, lang: String, filter: MainFilter): Main
   skills(id: Int, limit: Int, offset: Int, lang: String, filter: SkillsFilter): Skills
 }
 

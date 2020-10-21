@@ -2,13 +2,13 @@ import React from 'react';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import { ServerStyleSheets } from '@material-ui/core/styles';
 import theme from '../utils/theme';
-
 export default class MyDocument extends Document {
 	render() {
 		return (
-			<Html lang="en">
+			<Html lang="en" style={{
+				scrollBehavior: 'smooth'
+			}}>
 				<Head>
-					{/* PWA primary color */}
 					<meta name="theme-color" content={theme.palette.primary.main} />
 					<link
 						rel="stylesheet"

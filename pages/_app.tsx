@@ -1,15 +1,25 @@
-import type { AppProps } from 'next/app';
+import { AppProps } from 'next/app';
 import { ApolloProvider } from '@apollo/client';
+import {
+  ThemeProvider
+} from '@material-ui/core';
+// import InboxIcon from '@material-ui/icons/MoveToInbox';
+// import MailIcon from '@material-ui/icons/Mail';
 import { createApolloClient } from '../utils/apolloClient';
+import theme from '../utils/theme';
+import Navigation from '../components/Navigation';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const client = createApolloClient();
-
   return (
     <ApolloProvider client={client}>
-      <Component {...pageProps} />
+      <ThemeProvider theme={theme}>
+        <Navigation>
+          <Component {...pageProps} />
+        </Navigation>
+      </ThemeProvider>
     </ApolloProvider>
-  )
+  );
 }
 
 // Only uncomment this method if you have blocking data requirements for

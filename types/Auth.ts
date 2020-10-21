@@ -14,15 +14,15 @@ export const Unauthorized = t.type({
   success: t.literal(false),
 });
 
-interface Valid {
+export interface Valid {
   type: 'Valid'
   token: string,
 }
-interface Empty {
+export interface Empty {
   type: 'Empty'
   token: string,
 }
-interface Invalid {
+export interface Invalid {
   type: 'Invalid'
   token: string
 }

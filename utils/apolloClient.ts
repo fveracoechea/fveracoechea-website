@@ -1,4 +1,4 @@
-import { ApolloClient, InMemoryCache, from } from '@apollo/client';
+import { ApolloClient, InMemoryCache, from, ServerError } from '@apollo/client';
 import { onError } from "@apollo/client/link/error";
 import { createHttpLink } from "@apollo/client/link/http";
 import { setContext } from "@apollo/client/link/context";
@@ -8,15 +8,17 @@ import { pipe } from 'fp-ts/lib/pipeable';
 import * as TE from 'fp-ts/lib/TaskEither';
 import { Authentication } from '../types/Auth';
 import { authenticate, refresh } from './auth/api';
+import * as T from 'fp-ts/lib/Task';
+import { HttpError } from '../types/Directus';
 
-const getUri = (token: string) => process.env.NEXT_PUBLIC_DIRECTUS_GRAPHQL.concat(`?access_token=${token}`);
+const getUri = (token: string) => process.env.NEXT_PUBLIC_DIRECTUS_GRAPHQL!.concat(`?access_token=${token}`);
+const errorLog = (error: HttpError): IO<void> => () => console.error(error);
 
 const resetToken = onError(({ networkError, forward, operation }) => {
   const isNotAuthenticated: IO<boolean> = () => (
-    networkError &&
-    networkError.name === 'ServerError' &&
-    'statusCode' in networkError &&
-    networkError.statusCode === 401
+    Boolean(networkError) &&
+    networkError!.name === 'ServerError' &&
+    (networkError as ServerError).statusCode === 401
   );
   const invalidate: IO<void> = () => TokenStorage.invalidate();
   const retry: IO<any> = () => forward(operation);
@@ -25,7 +27,6 @@ const resetToken = onError(({ networkError, forward, operation }) => {
   const computation = chain(x => x ? errorCase : successCase)(isNotAuthenticated);
   return computation();
 });
-
 
 const authLink = setContext((Storage: any) => {
   const validate = Authentication.matchStrict({
@@ -36,12 +37,14 @@ const authLink = setContext((Storage: any) => {
   return pipe(
     validate(TokenStorage.getState()),
     TE.fold(
-      ({ message }) => () => Promise.resolve({ uri: getUri(message) }),
-      ({ token }) => () => Promise.resolve({ uri: getUri(token) })
+      (error) => pipe(
+        T.fromIO(errorLog(error)),
+        T.chain(() => T.of({ uri: getUri('') }))
+      ),
+      ({ token }) => T.of({ uri: getUri(token) })
     )
   )();
 });
-
 
 const httpLink = createHttpLink({
   fetch

@@ -14,6 +14,6 @@ export const TokenStorage = {
     token$.next(Authentication.of.Invalid({ token }));
   },
   setToken (token: string) {
-    token$.next(Authentication.of.Valid({ token }))
+    token$.next(Authentication.of.Valid({ token }));
   }
 }

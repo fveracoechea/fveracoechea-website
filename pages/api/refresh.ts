@@ -9,7 +9,7 @@ import { isPostRequest } from '../../utils/TaskEither';
 
 export default (req: NextApiRequest, res: NextApiResponse) => {
   const run = pipe(
-    isPostRequest(req.method),
+    isPostRequest(req.method!),
     TE.chain(() => authRequest('/auth/refresh', { token: req.body.token }, RefreshRequest))
   );
 

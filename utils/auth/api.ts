@@ -6,9 +6,6 @@ import { setHttpError, decodeWith, toAuthError } from '../decode';
 import { HttpError } from '../../types/Directus';
 import Url from '../Url';
 
-
-const BASE_URL = process.env.NEXT_PUBLIC_APP_URL;
-
 interface DirectusResponse {
   code?: number,
   token?: string,
@@ -44,10 +41,8 @@ const authRequest = <A>(url: string, body: A) => TE.tryCatch(
   )
 );
 
-
-
 export const authenticate = () => {
-  const url = Url.concat(process.env.NEXT_PUBLIC_APP_URL, '/api/authenticate');
+  const url = Url.concat(process.env.NEXT_PUBLIC_APP_URL!, '/api/authenticate');
   return pipe(
     authRequest(url, {}),
     TE.chain(decodeWith(Authorized))
@@ -55,7 +50,7 @@ export const authenticate = () => {
 };
 
 export const refresh = (token: string) => {
-  const url = Url.concat(process.env.NEXT_PUBLIC_APP_URL, '/api/refresh');
+  const url = Url.concat(process.env.NEXT_PUBLIC_APP_URL!, '/api/refresh');
   return pipe(
     authRequest(url, { token }),
     TE.chain(decodeWith(Authorized))

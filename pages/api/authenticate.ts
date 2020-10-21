@@ -10,12 +10,12 @@ import { isPostRequest } from '../../utils/TaskEither';
 
 export default (req: NextApiRequest, res: NextApiResponse) => {
   const run = pipe(
-    isPostRequest(req.method),
+    isPostRequest(req.method!),
     TE.chain(() => authRequest(
       '/auth/authenticate',
       {
-        email: process.env.DIRECTUS_EMAIL as EmailString,
-        password: process.env.DIRECTUS_PASSWORD
+        email: process.env.DIRECTUS_EMAIL! as EmailString,
+        password: process.env.DIRECTUS_PASSWORD!
       },
       AuthenticateRequest
     ))
