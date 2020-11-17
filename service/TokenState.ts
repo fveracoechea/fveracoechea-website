@@ -15,5 +15,6 @@ export const TokenStorage = {
   },
   setToken (token: string) {
     token$.next(Authentication.of.Valid({ token }));
+    return token;
   }
 }

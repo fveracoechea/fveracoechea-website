@@ -13,6 +13,7 @@ import { HttpError } from '../types/Directus';
 
 const getUri = (token: string) => process.env.NEXT_PUBLIC_DIRECTUS_GRAPHQL!.concat(`?access_token=${token}`);
 const errorLog = (error: HttpError): IO<void> => () => console.error(error);
+const setToken = (token: string): IO<string> => () => TokenStorage.setToken(token);
 
 const resetToken = onError(({ networkError, forward, operation }) => {
   const isNotAuthenticated: IO<boolean> = () => (
@@ -28,7 +29,7 @@ const resetToken = onError(({ networkError, forward, operation }) => {
   return computation();
 });
 
-const authLink = setContext((Storage: any) => {
+const authLink = setContext(() => {
   const validate = Authentication.matchStrict({
     Empty: () => authenticate(),
     Invalid: ({ token }) => refresh(token),
@@ -41,7 +42,10 @@ const authLink = setContext((Storage: any) => {
         T.fromIO(errorLog(error)),
         T.chain(() => T.of({ uri: getUri('') }))
       ),
-      ({ token }) => T.of({ uri: getUri(token) })
+      ({ token }) => pipe(
+        T.fromIO(setToken(token)),
+        T.map(t => ({ uri: getUri(t) }))
+      )
     )
   )();
 });
@@ -58,6 +62,7 @@ export const createApolloClient = () => {
       resetToken,
       httpLink
     ]),
+    ssrMode: typeof window === 'undefined',
     cache: new InMemoryCache()
   });
 }

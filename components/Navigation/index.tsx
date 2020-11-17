@@ -1,58 +1,94 @@
-import { FC, ReactElement } from 'react';
-import Link from 'next/link';
+import React, { FC, ReactElement, useState } from 'react';
 import {
-  Container, AppBar, Drawer, Toolbar,
-  List, Typography, Divider, ListItem,
-  ListItemText, Avatar, IconButton
+  AppBar, Drawer, Toolbar, Hidden,
+  Typography, Avatar, IconButton, Icon,
+  useTheme, useMediaQuery,
 } from '@material-ui/core';
 import { useStyles } from './styles';
+import clsx from 'clsx';
+import DrawerList from './DrawerList';
 
 
 const Navigation: FC<{ children: ReactElement }> = ({ children }) => {
   const classes = useStyles();
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.down('sm'));
+  const [open, setOpen] = useState(false);
+  const onOpen = () => setOpen(true);
+  const onClose = () => setOpen(false);
   return (
     <div className={classes.root}>
-      <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar>
-        <Link href="/" passHref>
-          <IconButton>
+      <Hidden mdUp>
+        <AppBar
+          position="fixed"
+          className={clsx(classes.appBar, {
+            [classes.appBarShift]: open,
+          })}
+        >
+          <Toolbar>
             <Avatar src="/images/logo_blue.png" alt="Francisco Veracoechea" />
-          </IconButton>
-        </Link>
-        <Link href="/" passHref>
-          <Typography variant="h5" noWrap>
-            Francisco Veracoechea
-          </Typography>
-        </Link>
-        </Toolbar>
-      </AppBar>
+            <div className={classes.spacer} />
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="end"
+              onClick={onOpen}
+            >
+              <Icon>menu</Icon> 
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+      </Hidden>
       <Drawer
-        className={classes.drawer}
-        variant="permanent"
+        color="primary"
+        variant={matches ? 'temporary' : 'permanent'}
+        className={clsx(classes.drawer, {
+          [classes.drawerOpen]: open,
+          [classes.drawerClose]: !open,
+        })}
+        onClose={onClose}
+        open={open}
         classes={{
-          paper: classes.drawerPaper,
+          paper: clsx({
+            [classes.drawerOpen]: open,
+            [classes.drawerClose]: !open,
+          }),
         }}
       >
-        <Toolbar />
+        <div className={classes.buttonWrappwer}>
+          <IconButton
+            aria-label="open drawer"
+            onClick={open ? onClose : onOpen}
+            edge="start"
+            style={!matches ? { color: theme.palette.background.default } : {}}
+          >
+            <Icon>{ open ? 'chevron_left' : 'chevron_right' }</Icon>
+          </IconButton>
+        </div>
+        <div className={classes.toolbar}>
+          {open && (
+            <>
+              <Typography variant="h4" color="primary">
+                Francisco
+              </Typography>
+              <Typography variant="h4" color="primary">
+                Veracoechea
+              </Typography>
+              <Typography variant="subtitle1" color={!matches ? 'textSecondary' : 'textPrimary'}>
+                Web Developer
+              </Typography>
+            </>
+          )}
+          {!open && <Avatar src="/images/logo_blue.png" alt="Francisco Veracoechea" />}
+        </div>
         <div className={classes.drawerContainer}>
-          <List>
-            {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-              <ListItem button key={text}>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
-          </List>
-          <Divider />
-          <List>
-            {['All mail', 'Trash', 'Spam'].map((text, index) => (
-              <ListItem button key={text}>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
-          </List>
+          <DrawerList onClose={onClose} />
         </div>
       </Drawer>
-      <main className={classes.container}>
+      <main className={clsx(classes.container, {
+        [classes.containerOpen]: open,
+        [classes.containerClose]: !open,
+      })}>
         {children}
       </main>
     </div>

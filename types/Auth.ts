@@ -31,4 +31,4 @@ export const Authentication = makeADT('type')({
   Valid: ofType<Valid>(),
   Empty: ofType<Empty>(),
   Invalid: ofType<Invalid>()
-})
+});

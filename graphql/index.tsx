@@ -59,6 +59,16 @@ export type AboutMeFilter = {
   picture_has?: Maybe<Scalars['String']>;
   descriptions_all?: Maybe<Scalars['String']>;
   descriptions_has?: Maybe<Scalars['String']>;
+  quote_eq?: Maybe<Scalars['String']>;
+  quote_neq?: Maybe<Scalars['String']>;
+  quote_contains?: Maybe<Scalars['String']>;
+  quote_ncontains?: Maybe<Scalars['String']>;
+  quote_rlike?: Maybe<Scalars['String']>;
+  quote_nrlike?: Maybe<Scalars['String']>;
+  quote_empty?: Maybe<Scalars['String']>;
+  quote_nempty?: Maybe<Scalars['String']>;
+  quote_null?: Maybe<Scalars['String']>;
+  quote_nnull?: Maybe<Scalars['String']>;
   or?: Maybe<Array<Maybe<AboutMeFilter>>>;
   and?: Maybe<Array<Maybe<AboutMeFilter>>>;
 };
@@ -70,6 +80,63 @@ export type AboutMeItem = {
   full_name: Scalars['String'];
   picture: DirectusFileItem;
   descriptions?: Maybe<Scalars['JSON']>;
+  quote?: Maybe<Scalars['String']>;
+};
+
+export type Carousel = {
+  __typename?: 'Carousel';
+  data?: Maybe<Array<Maybe<CarouselItem>>>;
+  meta?: Maybe<Metadata>;
+};
+
+export type CarouselFilter = {
+  id_eq?: Maybe<Scalars['Int']>;
+  id_neq?: Maybe<Scalars['Int']>;
+  id_lt?: Maybe<Scalars['Int']>;
+  id_lte?: Maybe<Scalars['Int']>;
+  id_gt?: Maybe<Scalars['Int']>;
+  id_gte?: Maybe<Scalars['Int']>;
+  id_in?: Maybe<Scalars['String']>;
+  id_nin?: Maybe<Scalars['String']>;
+  id_between?: Maybe<Scalars['String']>;
+  id_nbetween?: Maybe<Scalars['String']>;
+  status_eq?: Maybe<Scalars['String']>;
+  status_neq?: Maybe<Scalars['String']>;
+  status_in?: Maybe<Scalars['String']>;
+  status_nin?: Maybe<Scalars['String']>;
+  image_all?: Maybe<Scalars['String']>;
+  image_has?: Maybe<Scalars['String']>;
+  title_eq?: Maybe<Scalars['String']>;
+  title_neq?: Maybe<Scalars['String']>;
+  title_contains?: Maybe<Scalars['String']>;
+  title_ncontains?: Maybe<Scalars['String']>;
+  title_rlike?: Maybe<Scalars['String']>;
+  title_nrlike?: Maybe<Scalars['String']>;
+  title_empty?: Maybe<Scalars['String']>;
+  title_nempty?: Maybe<Scalars['String']>;
+  title_null?: Maybe<Scalars['String']>;
+  title_nnull?: Maybe<Scalars['String']>;
+  description_eq?: Maybe<Scalars['String']>;
+  description_neq?: Maybe<Scalars['String']>;
+  description_contains?: Maybe<Scalars['String']>;
+  description_ncontains?: Maybe<Scalars['String']>;
+  description_rlike?: Maybe<Scalars['String']>;
+  description_nrlike?: Maybe<Scalars['String']>;
+  description_empty?: Maybe<Scalars['String']>;
+  description_nempty?: Maybe<Scalars['String']>;
+  description_null?: Maybe<Scalars['String']>;
+  description_nnull?: Maybe<Scalars['String']>;
+  or?: Maybe<Array<Maybe<CarouselFilter>>>;
+  and?: Maybe<Array<Maybe<CarouselFilter>>>;
+};
+
+export type CarouselItem = {
+  __typename?: 'CarouselItem';
+  id: Scalars['ID'];
+  status: Scalars['String'];
+  image: DirectusFileItem;
+  title?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
 };
 
 export type Contact = {
@@ -1268,6 +1335,16 @@ export type MainFilter = {
   social_has?: Maybe<Scalars['String']>;
   background_image_all?: Maybe<Scalars['String']>;
   background_image_has?: Maybe<Scalars['String']>;
+  slogan_eq?: Maybe<Scalars['String']>;
+  slogan_neq?: Maybe<Scalars['String']>;
+  slogan_contains?: Maybe<Scalars['String']>;
+  slogan_ncontains?: Maybe<Scalars['String']>;
+  slogan_rlike?: Maybe<Scalars['String']>;
+  slogan_nrlike?: Maybe<Scalars['String']>;
+  slogan_empty?: Maybe<Scalars['String']>;
+  slogan_nempty?: Maybe<Scalars['String']>;
+  slogan_null?: Maybe<Scalars['String']>;
+  slogan_nnull?: Maybe<Scalars['String']>;
   or?: Maybe<Array<Maybe<MainFilter>>>;
   and?: Maybe<Array<Maybe<MainFilter>>>;
 };
@@ -1279,6 +1356,7 @@ export type MainItem = {
   subtitle: Scalars['String'];
   social: Scalars['JSON'];
   background_image?: Maybe<DirectusFileItem>;
+  slogan: Scalars['String'];
 };
 
 export type Metadata = {
@@ -1304,6 +1382,7 @@ export type Query = {
   directus_settings?: Maybe<DirectusSetting>;
   directus_users?: Maybe<DirectusUser>;
   about_me?: Maybe<AboutMe>;
+  carousel?: Maybe<Carousel>;
   contact?: Maybe<Contact>;
   information?: Maybe<Information>;
   interests?: Maybe<Interests>;
@@ -1408,6 +1487,15 @@ export type QueryAbout_MeArgs = {
   offset?: Maybe<Scalars['Int']>;
   lang?: Maybe<Scalars['String']>;
   filter?: Maybe<AboutMeFilter>;
+};
+
+
+export type QueryCarouselArgs = {
+  id?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  lang?: Maybe<Scalars['String']>;
+  filter?: Maybe<CarouselFilter>;
 };
 
 
@@ -1528,16 +1616,38 @@ export type SkillsItem = {
   name: Scalars['String'];
 };
 
-export type InterestQueryVariables = Exact<{ [key: string]: never; }>;
+export type AboutMeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type InterestQuery = (
+export type AboutMeQuery = (
   { __typename?: 'Query' }
-  & { interests?: Maybe<(
+  & { about_me?: Maybe<(
+    { __typename?: 'AboutMe' }
+    & { data?: Maybe<Array<Maybe<(
+      { __typename?: 'AboutMeItem' }
+      & Pick<AboutMeItem, 'id' | 'full_name' | 'quote' | 'descriptions'>
+      & { picture: (
+        { __typename?: 'DirectusFileItem' }
+        & Pick<DirectusFileItem, 'full_url'>
+      ) }
+    )>>> }
+  )>, contact?: Maybe<(
+    { __typename?: 'Contact' }
+    & { data?: Maybe<Array<Maybe<(
+      { __typename?: 'ContactItem' }
+      & Pick<ContactItem, 'id' | 'icon' | 'info'>
+    )>>> }
+  )>, interests?: Maybe<(
     { __typename?: 'Interests' }
     & { data?: Maybe<Array<Maybe<(
       { __typename?: 'InterestsItem' }
       & Pick<InterestsItem, 'id' | 'name' | 'icon' | 'description'>
+    )>>> }
+  )>, information?: Maybe<(
+    { __typename?: 'Information' }
+    & { data?: Maybe<Array<Maybe<(
+      { __typename?: 'InformationItem' }
+      & Pick<InformationItem, 'id' | 'icon' | 'text'>
     )>>> }
   )> }
 );
@@ -1551,7 +1661,7 @@ export type MainSectionQuery = (
     { __typename?: 'Main' }
     & { data?: Maybe<Array<Maybe<(
       { __typename?: 'MainItem' }
-      & Pick<MainItem, 'id' | 'title' | 'subtitle'>
+      & Pick<MainItem, 'id' | 'title' | 'subtitle' | 'slogan' | 'social'>
       & { background_image?: Maybe<(
         { __typename?: 'DirectusFileItem' }
         & Pick<DirectusFileItem, 'full_url'>
@@ -1560,9 +1670,55 @@ export type MainSectionQuery = (
   )> }
 );
 
+export type SkillsSectionQueryVariables = Exact<{ [key: string]: never; }>;
 
-export const InterestDocument = gql`
-    query Interest {
+
+export type SkillsSectionQuery = (
+  { __typename?: 'Query' }
+  & { skills?: Maybe<(
+    { __typename?: 'Skills' }
+    & { data?: Maybe<Array<Maybe<(
+      { __typename?: 'SkillsItem' }
+      & Pick<SkillsItem, 'id' | 'name' | 'type' | 'link'>
+      & { image: (
+        { __typename?: 'DirectusFileItem' }
+        & Pick<DirectusFileItem, 'full_url'>
+      ) }
+    )>>> }
+  )>, carousel?: Maybe<(
+    { __typename?: 'Carousel' }
+    & { data?: Maybe<Array<Maybe<(
+      { __typename?: 'CarouselItem' }
+      & Pick<CarouselItem, 'id' | 'title' | 'description'>
+      & { image: (
+        { __typename?: 'DirectusFileItem' }
+        & Pick<DirectusFileItem, 'full_url'>
+      ) }
+    )>>> }
+  )> }
+);
+
+
+export const AboutMeDocument = gql`
+    query AboutMe {
+  about_me {
+    data {
+      id
+      full_name
+      quote
+      picture {
+        full_url
+      }
+      descriptions
+    }
+  }
+  contact {
+    data {
+      id
+      icon
+      info
+    }
+  }
   interests {
     data {
       id
@@ -1571,33 +1727,40 @@ export const InterestDocument = gql`
       description
     }
   }
+  information {
+    data {
+      id
+      icon
+      text
+    }
+  }
 }
     `;
 
 /**
- * __useInterestQuery__
+ * __useAboutMeQuery__
  *
- * To run a query within a React component, call `useInterestQuery` and pass it any options that fit your needs.
- * When your component renders, `useInterestQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useAboutMeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAboutMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useInterestQuery({
+ * const { data, loading, error } = useAboutMeQuery({
  *   variables: {
  *   },
  * });
  */
-export function useInterestQuery(baseOptions?: Apollo.QueryHookOptions<InterestQuery, InterestQueryVariables>) {
-        return Apollo.useQuery<InterestQuery, InterestQueryVariables>(InterestDocument, baseOptions);
+export function useAboutMeQuery(baseOptions?: Apollo.QueryHookOptions<AboutMeQuery, AboutMeQueryVariables>) {
+        return Apollo.useQuery<AboutMeQuery, AboutMeQueryVariables>(AboutMeDocument, baseOptions);
       }
-export function useInterestLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<InterestQuery, InterestQueryVariables>) {
-          return Apollo.useLazyQuery<InterestQuery, InterestQueryVariables>(InterestDocument, baseOptions);
+export function useAboutMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AboutMeQuery, AboutMeQueryVariables>) {
+          return Apollo.useLazyQuery<AboutMeQuery, AboutMeQueryVariables>(AboutMeDocument, baseOptions);
         }
-export type InterestQueryHookResult = ReturnType<typeof useInterestQuery>;
-export type InterestLazyQueryHookResult = ReturnType<typeof useInterestLazyQuery>;
-export type InterestQueryResult = Apollo.QueryResult<InterestQuery, InterestQueryVariables>;
+export type AboutMeQueryHookResult = ReturnType<typeof useAboutMeQuery>;
+export type AboutMeLazyQueryHookResult = ReturnType<typeof useAboutMeLazyQuery>;
+export type AboutMeQueryResult = Apollo.QueryResult<AboutMeQuery, AboutMeQueryVariables>;
 export const MainSectionDocument = gql`
     query MainSection {
   main {
@@ -1605,6 +1768,8 @@ export const MainSectionDocument = gql`
       id
       title
       subtitle
+      slogan
+      social
       background_image {
         full_url
       }
@@ -1637,6 +1802,56 @@ export function useMainSectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type MainSectionQueryHookResult = ReturnType<typeof useMainSectionQuery>;
 export type MainSectionLazyQueryHookResult = ReturnType<typeof useMainSectionLazyQuery>;
 export type MainSectionQueryResult = Apollo.QueryResult<MainSectionQuery, MainSectionQueryVariables>;
+export const SkillsSectionDocument = gql`
+    query SkillsSection {
+  skills {
+    data {
+      id
+      name
+      type
+      link
+      image {
+        full_url
+      }
+    }
+  }
+  carousel {
+    data {
+      id
+      title
+      description
+      image {
+        full_url
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useSkillsSectionQuery__
+ *
+ * To run a query within a React component, call `useSkillsSectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSkillsSectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSkillsSectionQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useSkillsSectionQuery(baseOptions?: Apollo.QueryHookOptions<SkillsSectionQuery, SkillsSectionQueryVariables>) {
+        return Apollo.useQuery<SkillsSectionQuery, SkillsSectionQueryVariables>(SkillsSectionDocument, baseOptions);
+      }
+export function useSkillsSectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SkillsSectionQuery, SkillsSectionQueryVariables>) {
+          return Apollo.useLazyQuery<SkillsSectionQuery, SkillsSectionQueryVariables>(SkillsSectionDocument, baseOptions);
+        }
+export type SkillsSectionQueryHookResult = ReturnType<typeof useSkillsSectionQuery>;
+export type SkillsSectionLazyQueryHookResult = ReturnType<typeof useSkillsSectionLazyQuery>;
+export type SkillsSectionQueryResult = Apollo.QueryResult<SkillsSectionQuery, SkillsSectionQueryVariables>;
 
       export interface IntrospectionResultData {
         __schema: {

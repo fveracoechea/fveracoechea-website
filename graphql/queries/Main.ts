@@ -7,6 +7,8 @@ export default gql`
         id
         title
         subtitle
+        slogan
+        social
         background_image {
           full_url
         }

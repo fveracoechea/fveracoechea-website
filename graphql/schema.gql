@@ -38,6 +38,16 @@ input AboutMeFilter {
   picture_has: String
   descriptions_all: String
   descriptions_has: String
+  quote_eq: String
+  quote_neq: String
+  quote_contains: String
+  quote_ncontains: String
+  quote_rlike: String
+  quote_nrlike: String
+  quote_empty: String
+  quote_nempty: String
+  quote_null: String
+  quote_nnull: String
   or: [AboutMeFilter]
   and: [AboutMeFilter]
 }
@@ -48,6 +58,61 @@ type AboutMeItem {
   full_name: String!
   picture: DirectusFileItem!
   descriptions: JSON
+  quote: String
+}
+
+type Carousel {
+  data: [CarouselItem]
+  meta: Metadata
+}
+
+input CarouselFilter {
+  id_eq: Int
+  id_neq: Int
+  id_lt: Int
+  id_lte: Int
+  id_gt: Int
+  id_gte: Int
+  id_in: String
+  id_nin: String
+  id_between: String
+  id_nbetween: String
+  status_eq: String
+  status_neq: String
+  status_in: String
+  status_nin: String
+  image_all: String
+  image_has: String
+  title_eq: String
+  title_neq: String
+  title_contains: String
+  title_ncontains: String
+  title_rlike: String
+  title_nrlike: String
+  title_empty: String
+  title_nempty: String
+  title_null: String
+  title_nnull: String
+  description_eq: String
+  description_neq: String
+  description_contains: String
+  description_ncontains: String
+  description_rlike: String
+  description_nrlike: String
+  description_empty: String
+  description_nempty: String
+  description_null: String
+  description_nnull: String
+  or: [CarouselFilter]
+  and: [CarouselFilter]
+}
+
+type CarouselItem {
+  id: ID!
+  status: String!
+  image: DirectusFileItem!
+  title: String
+  description: String
 }
 
 type Contact {
@@ -1221,6 +1286,16 @@ input MainFilter {
   social_has: String
   background_image_all: String
   background_image_has: String
+  slogan_eq: String
+  slogan_neq: String
+  slogan_contains: String
+  slogan_ncontains: String
+  slogan_rlike: String
+  slogan_nrlike: String
+  slogan_empty: String
+  slogan_nempty: String
+  slogan_null: String
+  slogan_nnull: String
   or: [MainFilter]
   and: [MainFilter]
 }
@@ -1231,6 +1306,7 @@ type MainItem {
   subtitle: String!
   social: JSON!
   background_image: DirectusFileItem
+  slogan: String!
 }
 
 type Metadata {
@@ -1258,6 +1334,7 @@ type Query {
   directus_settings(id: ID, limit: Int, offset: Int): DirectusSetting
   directus_users(id: ID, limit: Int, offset: Int, filter: DirectusUsersFilter): DirectusUser
   about_me(id: Int, limit: Int, offset: Int, lang: String, filter: AboutMeFilter): AboutMe
+  carousel(id: Int, limit: Int, offset: Int, lang: String, filter: CarouselFilter): Carousel
   contact(id: Int, limit: Int, offset: Int, lang: String, filter: ContactFilter): Contact
   information(id: Int, limit: Int, offset: Int, lang: String, filter: InformationFilter): Information
   interests(id: Int, limit: Int, offset: Int, lang: String, filter: InterestsFilter): Interests

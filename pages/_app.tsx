@@ -1,21 +1,37 @@
-import { AppProps } from 'next/app';
+import { AppProps, Container } from 'next/app';
 import { ApolloProvider } from '@apollo/client';
 import {
   ThemeProvider
 } from '@material-ui/core';
-// import InboxIcon from '@material-ui/icons/MoveToInbox';
-// import MailIcon from '@material-ui/icons/Mail';
-import { createApolloClient } from '../utils/apolloClient';
 import theme from '../utils/theme';
+import useApollo from '../hooks/useApollo';
 import Navigation from '../components/Navigation';
+import 'pure-react-carousel/dist/react-carousel.es.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const client = createApolloClient();
+  const client = useApollo(pageProps.initialApolloState);
   return (
     <ApolloProvider client={client}>
       <ThemeProvider theme={theme}>
         <Navigation>
-          <Component {...pageProps} />
+          <Container>
+            <style global jsx>
+              {`
+                * {
+                  padding: 0;
+                  margin: 0;
+                  box-sizing: border-box;
+                }
+                html {
+                  scroll-behavior: smooth;
+                }
+                body {
+                  background-color: #2b2b2b;
+                }
+              `}
+            </style>
+            <Component {...pageProps} />
+          </Container>
         </Navigation>
       </ThemeProvider>
     </ApolloProvider>

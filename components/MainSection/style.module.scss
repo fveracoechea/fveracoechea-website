@@ -1,0 +1,35 @@
+$primary: steelblue;
+
+.svgLogoLeft {
+    z-index: 2;
+    animation: fill .6s ease forwards 3s;
+}
+.svgLogoRight {
+    z-index: 2;
+    animation: fill .6s ease forwards 3s;
+}
+.svgLogoRight path:nth-child(1) {
+    stroke-dasharray: 275.30572509765625px;
+    stroke-dashoffset: 275.30572509765625px;
+    animation: line-anim 2s ease forwards 1s;
+}
+.svgLogoLeft path:nth-child(1) {
+    stroke-dasharray: 275.30572509765625px;
+    stroke-dashoffset: 275.30572509765625px;
+    animation: line-anim 2s ease forwards 1s;
+}
+
+@keyframes line-anim {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes fill {
+    from {
+        fill: transparent;
+    }
+    to {
+        fill: $primary;
+    }
+}
