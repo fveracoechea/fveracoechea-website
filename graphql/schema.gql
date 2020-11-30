@@ -1115,6 +1115,88 @@ input DirectusUsersFilter {
   and: [DirectusUsersFilter]
 }
 
+type Experience {
+  data: [ExperienceItem]
+  meta: Metadata
+}
+
+input ExperienceFilter {
+  id_eq: Int
+  id_neq: Int
+  id_lt: Int
+  id_lte: Int
+  id_gt: Int
+  id_gte: Int
+  id_in: String
+  id_nin: String
+  id_between: String
+  id_nbetween: String
+  company_name_eq: String
+  company_name_neq: String
+  company_name_contains: String
+  company_name_ncontains: String
+  company_name_rlike: String
+  company_name_nrlike: String
+  company_name_empty: String
+  company_name_nempty: String
+  company_name_null: String
+  company_name_nnull: String
+  company_logo_all: String
+  company_logo_has: String
+  position_eq: String
+  position_neq: String
+  position_contains: String
+  position_ncontains: String
+  position_rlike: String
+  position_nrlike: String
+  position_empty: String
+  position_nempty: String
+  position_null: String
+  position_nnull: String
+  description_eq: String
+  description_neq: String
+  description_contains: String
+  description_ncontains: String
+  description_rlike: String
+  description_nrlike: String
+  description_empty: String
+  description_nempty: String
+  description_null: String
+  description_nnull: String
+  website_eq: String
+  website_neq: String
+  website_contains: String
+  website_ncontains: String
+  website_rlike: String
+  website_nrlike: String
+  website_empty: String
+  website_nempty: String
+  website_null: String
+  website_nnull: String
+  working_time_eq: String
+  working_time_neq: String
+  working_time_contains: String
+  working_time_ncontains: String
+  working_time_rlike: String
+  working_time_nrlike: String
+  working_time_empty: String
+  working_time_nempty: String
+  working_time_null: String
+  working_time_nnull: String
+  or: [ExperienceFilter]
+  and: [ExperienceFilter]
+}
+
+type ExperienceItem {
+  id: ID!
+  company_name: String
+  company_logo: DirectusFileItem
+  position: String
+  description: String
+  website: String
+  working_time: String
+}
+
 type Information {
   data: [InformationItem]
   meta: Metadata
@@ -1296,6 +1378,8 @@ input MainFilter {
   slogan_nempty: String
   slogan_null: String
   slogan_nnull: String
+  resume_all: String
+  resume_has: String
   or: [MainFilter]
   and: [MainFilter]
 }
@@ -1307,6 +1391,7 @@ type MainItem {
   social: JSON!
   background_image: DirectusFileItem
   slogan: String!
+  resume: DirectusFileItem
 }
 
 type Metadata {
@@ -1336,6 +1421,7 @@ type Query {
   about_me(id: Int, limit: Int, offset: Int, lang: String, filter: AboutMeFilter): AboutMe
   carousel(id: Int, limit: Int, offset: Int, lang: String, filter: CarouselFilter): Carousel
   contact(id: Int, limit: Int, offset: Int, lang: String, filter: ContactFilter): Contact
+  experience(id: Int, limit: Int, offset: Int, lang: String, filter: ExperienceFilter): Experience
   information(id: Int, limit: Int, offset: Int, lang: String, filter: InformationFilter): Information
   interests(id: Int, limit: Int, offset: Int, lang: String, filter: InterestsFilter): Interests
   main(id: Int, limit: Int, offset: Int, lang: String, filter: MainFilter): Main

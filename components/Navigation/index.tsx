@@ -7,15 +7,19 @@ import {
 import { useStyles } from './styles';
 import clsx from 'clsx';
 import DrawerList from './DrawerList';
-
+import useDevice from '../../hooks/useDevice';
+import useObservable from '../../hooks/useObservable';
+import { main$, initialState } from '../../service/Main$';
 
 const Navigation: FC<{ children: ReactElement }> = ({ children }) => {
   const classes = useStyles();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down('sm'));
-  const [open, setOpen] = useState(false);
+  const { isMobile } = useDevice();
+  const [open, setOpen] = useState(!isMobile);
   const onOpen = () => setOpen(true);
   const onClose = () => setOpen(false);
+  const { value } = useObservable(main$, initialState);
   return (
     <div className={classes.root}>
       <Hidden mdUp>
@@ -75,7 +79,7 @@ const Navigation: FC<{ children: ReactElement }> = ({ children }) => {
                 Veracoechea
               </Typography>
               <Typography variant="subtitle1" color={!matches ? 'textSecondary' : 'textPrimary'}>
-                Web Developer
+                {value.subtitle}
               </Typography>
             </>
           )}

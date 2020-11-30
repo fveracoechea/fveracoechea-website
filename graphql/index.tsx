@@ -1164,6 +1164,90 @@ export type DirectusUsersFilter = {
   and?: Maybe<Array<Maybe<DirectusUsersFilter>>>;
 };
 
+export type Experience = {
+  __typename?: 'Experience';
+  data?: Maybe<Array<Maybe<ExperienceItem>>>;
+  meta?: Maybe<Metadata>;
+};
+
+export type ExperienceFilter = {
+  id_eq?: Maybe<Scalars['Int']>;
+  id_neq?: Maybe<Scalars['Int']>;
+  id_lt?: Maybe<Scalars['Int']>;
+  id_lte?: Maybe<Scalars['Int']>;
+  id_gt?: Maybe<Scalars['Int']>;
+  id_gte?: Maybe<Scalars['Int']>;
+  id_in?: Maybe<Scalars['String']>;
+  id_nin?: Maybe<Scalars['String']>;
+  id_between?: Maybe<Scalars['String']>;
+  id_nbetween?: Maybe<Scalars['String']>;
+  company_name_eq?: Maybe<Scalars['String']>;
+  company_name_neq?: Maybe<Scalars['String']>;
+  company_name_contains?: Maybe<Scalars['String']>;
+  company_name_ncontains?: Maybe<Scalars['String']>;
+  company_name_rlike?: Maybe<Scalars['String']>;
+  company_name_nrlike?: Maybe<Scalars['String']>;
+  company_name_empty?: Maybe<Scalars['String']>;
+  company_name_nempty?: Maybe<Scalars['String']>;
+  company_name_null?: Maybe<Scalars['String']>;
+  company_name_nnull?: Maybe<Scalars['String']>;
+  company_logo_all?: Maybe<Scalars['String']>;
+  company_logo_has?: Maybe<Scalars['String']>;
+  position_eq?: Maybe<Scalars['String']>;
+  position_neq?: Maybe<Scalars['String']>;
+  position_contains?: Maybe<Scalars['String']>;
+  position_ncontains?: Maybe<Scalars['String']>;
+  position_rlike?: Maybe<Scalars['String']>;
+  position_nrlike?: Maybe<Scalars['String']>;
+  position_empty?: Maybe<Scalars['String']>;
+  position_nempty?: Maybe<Scalars['String']>;
+  position_null?: Maybe<Scalars['String']>;
+  position_nnull?: Maybe<Scalars['String']>;
+  description_eq?: Maybe<Scalars['String']>;
+  description_neq?: Maybe<Scalars['String']>;
+  description_contains?: Maybe<Scalars['String']>;
+  description_ncontains?: Maybe<Scalars['String']>;
+  description_rlike?: Maybe<Scalars['String']>;
+  description_nrlike?: Maybe<Scalars['String']>;
+  description_empty?: Maybe<Scalars['String']>;
+  description_nempty?: Maybe<Scalars['String']>;
+  description_null?: Maybe<Scalars['String']>;
+  description_nnull?: Maybe<Scalars['String']>;
+  website_eq?: Maybe<Scalars['String']>;
+  website_neq?: Maybe<Scalars['String']>;
+  website_contains?: Maybe<Scalars['String']>;
+  website_ncontains?: Maybe<Scalars['String']>;
+  website_rlike?: Maybe<Scalars['String']>;
+  website_nrlike?: Maybe<Scalars['String']>;
+  website_empty?: Maybe<Scalars['String']>;
+  website_nempty?: Maybe<Scalars['String']>;
+  website_null?: Maybe<Scalars['String']>;
+  website_nnull?: Maybe<Scalars['String']>;
+  working_time_eq?: Maybe<Scalars['String']>;
+  working_time_neq?: Maybe<Scalars['String']>;
+  working_time_contains?: Maybe<Scalars['String']>;
+  working_time_ncontains?: Maybe<Scalars['String']>;
+  working_time_rlike?: Maybe<Scalars['String']>;
+  working_time_nrlike?: Maybe<Scalars['String']>;
+  working_time_empty?: Maybe<Scalars['String']>;
+  working_time_nempty?: Maybe<Scalars['String']>;
+  working_time_null?: Maybe<Scalars['String']>;
+  working_time_nnull?: Maybe<Scalars['String']>;
+  or?: Maybe<Array<Maybe<ExperienceFilter>>>;
+  and?: Maybe<Array<Maybe<ExperienceFilter>>>;
+};
+
+export type ExperienceItem = {
+  __typename?: 'ExperienceItem';
+  id: Scalars['ID'];
+  company_name?: Maybe<Scalars['String']>;
+  company_logo?: Maybe<DirectusFileItem>;
+  position?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  website?: Maybe<Scalars['String']>;
+  working_time?: Maybe<Scalars['String']>;
+};
+
 export type Information = {
   __typename?: 'Information';
   data?: Maybe<Array<Maybe<InformationItem>>>;
@@ -1345,6 +1429,8 @@ export type MainFilter = {
   slogan_nempty?: Maybe<Scalars['String']>;
   slogan_null?: Maybe<Scalars['String']>;
   slogan_nnull?: Maybe<Scalars['String']>;
+  resume_all?: Maybe<Scalars['String']>;
+  resume_has?: Maybe<Scalars['String']>;
   or?: Maybe<Array<Maybe<MainFilter>>>;
   and?: Maybe<Array<Maybe<MainFilter>>>;
 };
@@ -1357,6 +1443,7 @@ export type MainItem = {
   social: Scalars['JSON'];
   background_image?: Maybe<DirectusFileItem>;
   slogan: Scalars['String'];
+  resume?: Maybe<DirectusFileItem>;
 };
 
 export type Metadata = {
@@ -1384,6 +1471,7 @@ export type Query = {
   about_me?: Maybe<AboutMe>;
   carousel?: Maybe<Carousel>;
   contact?: Maybe<Contact>;
+  experience?: Maybe<Experience>;
   information?: Maybe<Information>;
   interests?: Maybe<Interests>;
   main?: Maybe<Main>;
@@ -1508,6 +1596,15 @@ export type QueryContactArgs = {
 };
 
 
+export type QueryExperienceArgs = {
+  id?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  lang?: Maybe<Scalars['String']>;
+  filter?: Maybe<ExperienceFilter>;
+};
+
+
 export type QueryInformationArgs = {
   id?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
@@ -1616,12 +1713,43 @@ export type SkillsItem = {
   name: Scalars['String'];
 };
 
-export type AboutMeQueryVariables = Exact<{ [key: string]: never; }>;
+export type ExperienceSectionQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AboutMeQuery = (
+export type ExperienceSectionQuery = (
   { __typename?: 'Query' }
-  & { about_me?: Maybe<(
+  & { experience?: Maybe<(
+    { __typename?: 'Experience' }
+    & { data?: Maybe<Array<Maybe<(
+      { __typename?: 'ExperienceItem' }
+      & Pick<ExperienceItem, 'company_name' | 'position' | 'description' | 'website' | 'working_time'>
+      & { company_logo?: Maybe<(
+        { __typename?: 'DirectusFileItem' }
+        & Pick<DirectusFileItem, 'full_url'>
+      )> }
+    )>>> }
+  )> }
+);
+
+export type MainSectionQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MainSectionQuery = (
+  { __typename?: 'Query' }
+  & { main?: Maybe<(
+    { __typename?: 'Main' }
+    & { data?: Maybe<Array<Maybe<(
+      { __typename?: 'MainItem' }
+      & Pick<MainItem, 'id' | 'title' | 'subtitle' | 'slogan' | 'social'>
+      & { resume?: Maybe<(
+        { __typename?: 'DirectusFileItem' }
+        & Pick<DirectusFileItem, 'full_url'>
+      )>, background_image?: Maybe<(
+        { __typename?: 'DirectusFileItem' }
+        & Pick<DirectusFileItem, 'full_url'>
+      )> }
+    )>>> }
+  )>, about_me?: Maybe<(
     { __typename?: 'AboutMe' }
     & { data?: Maybe<Array<Maybe<(
       { __typename?: 'AboutMeItem' }
@@ -1649,33 +1777,7 @@ export type AboutMeQuery = (
       { __typename?: 'InformationItem' }
       & Pick<InformationItem, 'id' | 'icon' | 'text'>
     )>>> }
-  )> }
-);
-
-export type MainSectionQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type MainSectionQuery = (
-  { __typename?: 'Query' }
-  & { main?: Maybe<(
-    { __typename?: 'Main' }
-    & { data?: Maybe<Array<Maybe<(
-      { __typename?: 'MainItem' }
-      & Pick<MainItem, 'id' | 'title' | 'subtitle' | 'slogan' | 'social'>
-      & { background_image?: Maybe<(
-        { __typename?: 'DirectusFileItem' }
-        & Pick<DirectusFileItem, 'full_url'>
-      )> }
-    )>>> }
-  )> }
-);
-
-export type SkillsSectionQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type SkillsSectionQuery = (
-  { __typename?: 'Query' }
-  & { skills?: Maybe<(
+  )>, skills?: Maybe<(
     { __typename?: 'Skills' }
     & { data?: Maybe<Array<Maybe<(
       { __typename?: 'SkillsItem' }
@@ -1699,8 +1801,64 @@ export type SkillsSectionQuery = (
 );
 
 
-export const AboutMeDocument = gql`
-    query AboutMe {
+export const ExperienceSectionDocument = gql`
+    query ExperienceSection {
+  experience {
+    data {
+      company_name
+      company_logo {
+        full_url
+      }
+      position
+      description
+      website
+      working_time
+    }
+  }
+}
+    `;
+
+/**
+ * __useExperienceSectionQuery__
+ *
+ * To run a query within a React component, call `useExperienceSectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useExperienceSectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useExperienceSectionQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useExperienceSectionQuery(baseOptions?: Apollo.QueryHookOptions<ExperienceSectionQuery, ExperienceSectionQueryVariables>) {
+        return Apollo.useQuery<ExperienceSectionQuery, ExperienceSectionQueryVariables>(ExperienceSectionDocument, baseOptions);
+      }
+export function useExperienceSectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ExperienceSectionQuery, ExperienceSectionQueryVariables>) {
+          return Apollo.useLazyQuery<ExperienceSectionQuery, ExperienceSectionQueryVariables>(ExperienceSectionDocument, baseOptions);
+        }
+export type ExperienceSectionQueryHookResult = ReturnType<typeof useExperienceSectionQuery>;
+export type ExperienceSectionLazyQueryHookResult = ReturnType<typeof useExperienceSectionLazyQuery>;
+export type ExperienceSectionQueryResult = Apollo.QueryResult<ExperienceSectionQuery, ExperienceSectionQueryVariables>;
+export const MainSectionDocument = gql`
+    query MainSection {
+  main {
+    data {
+      id
+      title
+      subtitle
+      slogan
+      social
+      resume {
+        full_url
+      }
+      background_image {
+        full_url
+      }
+    }
+  }
   about_me {
     data {
       id
@@ -1734,43 +1892,23 @@ export const AboutMeDocument = gql`
       text
     }
   }
-}
-    `;
-
-/**
- * __useAboutMeQuery__
- *
- * To run a query within a React component, call `useAboutMeQuery` and pass it any options that fit your needs.
- * When your component renders, `useAboutMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useAboutMeQuery({
- *   variables: {
- *   },
- * });
- */
-export function useAboutMeQuery(baseOptions?: Apollo.QueryHookOptions<AboutMeQuery, AboutMeQueryVariables>) {
-        return Apollo.useQuery<AboutMeQuery, AboutMeQueryVariables>(AboutMeDocument, baseOptions);
+  skills {
+    data {
+      id
+      name
+      type
+      link
+      image {
+        full_url
       }
-export function useAboutMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AboutMeQuery, AboutMeQueryVariables>) {
-          return Apollo.useLazyQuery<AboutMeQuery, AboutMeQueryVariables>(AboutMeDocument, baseOptions);
-        }
-export type AboutMeQueryHookResult = ReturnType<typeof useAboutMeQuery>;
-export type AboutMeLazyQueryHookResult = ReturnType<typeof useAboutMeLazyQuery>;
-export type AboutMeQueryResult = Apollo.QueryResult<AboutMeQuery, AboutMeQueryVariables>;
-export const MainSectionDocument = gql`
-    query MainSection {
-  main {
+    }
+  }
+  carousel {
     data {
       id
       title
-      subtitle
-      slogan
-      social
-      background_image {
+      description
+      image {
         full_url
       }
     }
@@ -1802,56 +1940,6 @@ export function useMainSectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type MainSectionQueryHookResult = ReturnType<typeof useMainSectionQuery>;
 export type MainSectionLazyQueryHookResult = ReturnType<typeof useMainSectionLazyQuery>;
 export type MainSectionQueryResult = Apollo.QueryResult<MainSectionQuery, MainSectionQueryVariables>;
-export const SkillsSectionDocument = gql`
-    query SkillsSection {
-  skills {
-    data {
-      id
-      name
-      type
-      link
-      image {
-        full_url
-      }
-    }
-  }
-  carousel {
-    data {
-      id
-      title
-      description
-      image {
-        full_url
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useSkillsSectionQuery__
- *
- * To run a query within a React component, call `useSkillsSectionQuery` and pass it any options that fit your needs.
- * When your component renders, `useSkillsSectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useSkillsSectionQuery({
- *   variables: {
- *   },
- * });
- */
-export function useSkillsSectionQuery(baseOptions?: Apollo.QueryHookOptions<SkillsSectionQuery, SkillsSectionQueryVariables>) {
-        return Apollo.useQuery<SkillsSectionQuery, SkillsSectionQueryVariables>(SkillsSectionDocument, baseOptions);
-      }
-export function useSkillsSectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SkillsSectionQuery, SkillsSectionQueryVariables>) {
-          return Apollo.useLazyQuery<SkillsSectionQuery, SkillsSectionQueryVariables>(SkillsSectionDocument, baseOptions);
-        }
-export type SkillsSectionQueryHookResult = ReturnType<typeof useSkillsSectionQuery>;
-export type SkillsSectionLazyQueryHookResult = ReturnType<typeof useSkillsSectionLazyQuery>;
-export type SkillsSectionQueryResult = Apollo.QueryResult<SkillsSectionQuery, SkillsSectionQueryVariables>;
 
       export interface IntrospectionResultData {
         __schema: {

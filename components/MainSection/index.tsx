@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import {
   makeStyles, Theme, Typography, Hidden,
   Container
@@ -8,9 +8,11 @@ import { flexCenter } from '../../utils/styles/flexbox';
 import SvgLeft from './SvgLeft';
 import SvgRight from './Svgright';
 import Particles from 'react-particles-js';
-import { addRoute } from '../../service/Router$';
 import params from './particle';
 import { SocialSvgIcon } from '../SocialMedia';
+import useDelay from '../../hooks/useDelay';
+import { addRoute } from '../../service/Router$';
+import { main$ } from '../../service/Main$';
 
 type Props = {
   data: MainSectionQuery
@@ -21,7 +23,6 @@ const getBackgroud = (data: MainSectionQuery): string => data.main?.data![0]?.ba
 const useStyles = makeStyles<Theme, Props>(theme => ({
   main: ({ data }) => ({
     backgroundImage: `url("${getBackgroud(data)}")`,
-    // height: `calc(100vh - ${theme.spacing(8)}px)`,
     height: '100vh',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
@@ -51,7 +52,6 @@ const useStyles = makeStyles<Theme, Props>(theme => ({
     display: 'flex',
     zIndex: 2,
     flexDirection: 'column',
-    // alignSelf: 'flex-end'
   },
   particles: {
     position: 'absolute',
@@ -97,17 +97,25 @@ const useStyles = makeStyles<Theme, Props>(theme => ({
 }));
 
 const MainSection: FC<Props> = ({ data }) => {
-  const cms = data.main?.data![0];
-  // console.log('CMS', Object.entries<string>(cms?.social))
+  const cms = useMemo(() => data.main?.data![0] || null, [data]);
+  useDelay(
+    100,
+    () => addRoute({
+      name: 'Resume',
+      path: cms?.resume?.full_url!,
+      target: '_blank',
+      icon: 'description',
+      order: 4
+    })
+  );
+  const classes = useStyles({ data });
   useEffect(() => {
-    addRoute({
-      name: 'Home',
-      path: '#home',
-      icon: 'home',
-      order: 1,
+    main$.next({
+      title: cms?.title!,
+      subtitle: cms?.subtitle!,
+      background_image: cms?.background_image?.full_url!
     });
   }, []);
-  const classes = useStyles({ data });
   return (
     <section className={classes.main} id="home">
       <Particles

@@ -1,20 +1,18 @@
-import { FC, useEffect } from 'react';
-import { useAboutMeQuery } from '../../graphql/index';
+import { FC } from 'react';
+import { MainSectionQuery } from '../../graphql/index';
 import {
   Typography, makeStyles, Container, Grid, fade,
   List, ListItem, ListItemIcon, ListItemText, Icon,
 } from '@material-ui/core';
-import Skeleton from '@material-ui/lab/Skeleton';
-import { addRoute } from '../../service/Router$';
 import clsx from 'clsx';
 
 type Props = {
-
+  data: MainSectionQuery
 }
 
 const useStyles = makeStyles(theme => ({
   section: {
-    backgroundImage: 'url("/images/light_wool.png")',
+    backgroundImage: 'url("/images/furley_bg.png")',
     backgroundRepeat: 'repeat',
     backgroundAttachment: 'fixed',
   },
@@ -61,29 +59,19 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const AboutSection: FC<Props> = () => {
+const AboutSection: FC<Props> = ({ data }) => {
   const classes = useStyles();
-  const { data, loading } = useAboutMeQuery();
   const about_me = data?.about_me!.data![0]!;
   const interests = data?.interests?.data!;
   const info = data?.information?.data!;
   const contact = data?.contact?.data!;
-  useEffect(() => {
-    addRoute({
-      name: 'About Me',
-      path: '#about_me',
-      icon: 'information_outline',
-      order: 2,
-    })
-  }, [])
   return (
     <section id="about_me" className={classes.section}>
       <div className={classes.heading}>
-        <Typography variant="h4" color="textSecondary">
+        <Typography variant="h4" component="h2" color="textSecondary">
           About Me
         </Typography>
       </div>
-
       <Container>
         <Grid
           container
@@ -91,11 +79,11 @@ const AboutSection: FC<Props> = () => {
         >
           <Grid item md={12}>
             <Typography variant="h3" className={clsx(classes.quote, classes.light)}>
-              {loading ? <Skeleton width={300} /> : about_me.quote}
+              {about_me.quote}
             </Typography>
           </Grid>
           {
-            !loading && Object.entries<string>(about_me?.descriptions).map(([key, value]) => (
+            Object.entries<string>(about_me?.descriptions).map(([key, value]) => (
               <Grid
                 item
                 md={6}
@@ -110,30 +98,26 @@ const AboutSection: FC<Props> = () => {
               </Grid>
             ))
           }
-          {
-            !loading && (
-              <Grid
-                item
-                md={4}
-              >
-                <Typography variant="h5" className={clsx(classes.light)}>
-                  Interests
-                </Typography>
-                <List>
-                  {interests.map(item => (
-                    <ListItem button key={item!.id}>
-                      <ListItemIcon>
-                        <Icon>
-                          {item?.icon}
-                        </Icon>
-                      </ListItemIcon>
-                      <ListItemText primary={item?.name} />
-                    </ListItem>
-                  ))}
-                </List>
-              </Grid>
-            )
-          }
+          <Grid
+            item
+            md={4}
+          >
+            <Typography variant="h5" className={clsx(classes.light)}>
+              Interests
+            </Typography>
+            <List>
+              {interests.map(item => (
+                <ListItem button key={item!.id}>
+                  <ListItemIcon>
+                    <Icon>
+                      {item?.icon}
+                    </Icon>
+                  </ListItemIcon>
+                  <ListItemText primary={item?.name} />
+                </ListItem>
+              ))}
+            </List>
+          </Grid>
           <Grid
             item
             md={4}
@@ -142,7 +126,7 @@ const AboutSection: FC<Props> = () => {
               Knowledge
             </Typography>
             <List>
-              {!loading && info.map(item => (
+              {info.map(item => (
                 <ListItem key={item!.id}>
                   <ListItemIcon>
                     <Icon>
@@ -162,7 +146,7 @@ const AboutSection: FC<Props> = () => {
               Contact
             </Typography>
             <List>
-              {!loading && contact.map(item => (
+              {contact.map(item => (
                 <ListItem key={item!.id}>
                   <ListItemIcon>
                     <Icon>

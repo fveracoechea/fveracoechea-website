@@ -6,8 +6,10 @@ export type MainInfo = {
   background_image: string
 }
 
-export const main$ = new BehaviorSubject<MainInfo>({
+export const initialState: MainInfo = {
   title: 'Francisco Veracoechea',
   subtitle: 'Web Developer',
   background_image: '',
-});
+}
+
+export const main$ = new BehaviorSubject<MainInfo>(initialState);
