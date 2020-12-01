@@ -1,9 +1,9 @@
 import { Grid, Typography, Button, makeStyles } from '@material-ui/core';
 import { FC, useMemo } from 'react';
-import { SkillsSectionQuery, SkillsItem } from '../../graphql/index';
+import { MainSectionQuery, SkillsItem } from '../../graphql/index';
 
 type Props = {
-  data: SkillsSectionQuery
+  data: MainSectionQuery
 }
 
 const useStyles = makeStyles(theme => ({
