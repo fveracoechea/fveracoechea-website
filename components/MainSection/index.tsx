@@ -1,7 +1,7 @@
 import { FC, useEffect, useMemo } from 'react';
 import {
   makeStyles, Theme, Typography, Hidden,
-  Container
+  Container, useMediaQuery
 } from "@material-ui/core";
 import { MainSectionQuery } from '../../graphql/index';
 import { flexCenter } from '../../utils/styles/flexbox';
@@ -52,6 +52,9 @@ const useStyles = makeStyles<Theme, Props>(theme => ({
     display: 'flex',
     zIndex: 2,
     flexDirection: 'column',
+    [theme.breakpoints.down('sm')]: {
+      textAlign: 'center',
+    }
   },
   particles: {
     position: 'absolute',
@@ -78,6 +81,9 @@ const useStyles = makeStyles<Theme, Props>(theme => ({
   },
   slogan: {
     zIndex: 2,
+    [theme.breakpoints.down('sm')]: {
+      textAlign: 'center',
+    }
   },
   social: {
     zIndex: 2,
@@ -116,6 +122,7 @@ const MainSection: FC<Props> = ({ data }) => {
       background_image: cms?.background_image?.full_url!
     });
   }, []);
+  const matches = useMediaQuery<Theme>(theme => theme.breakpoints.down('sm'));
   return (
     <section className={classes.main} id="home">
       <Particles
@@ -128,7 +135,7 @@ const MainSection: FC<Props> = ({ data }) => {
             <SvgLeft />
           </Hidden>
           <div className={classes.titleWrapper}>
-            <Typography variant="h2" component="h1" color="textSecondary">
+            <Typography variant={matches ? 'h1' : 'h2'} component="h1" color="textSecondary">
               {cms?.title}
             </Typography>
             <Typography variant="h4" component="h3" color="textSecondary">

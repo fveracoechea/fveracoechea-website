@@ -61,14 +61,14 @@ const setNode = (
   node: HTMLElement | null,
   observer: MutableRefObject<IntersectionObserver | null>,
   target: MutableRefObject<Element | null>,
-  obsCallback: IntersectionObserverCallback,
+  intersectionCallback: IntersectionObserverCallback,
   threshold: number
 ): io.IO<void> => () => pipe(
   fromNullable(node),
   fold(
     ioVoid,
     n => {
-      observer.current = new IntersectionObserver(obsCallback, { threshold });
+      observer.current = new IntersectionObserver(intersectionCallback, { threshold });
       observer.current.observe(n);
       target.current = n;
     }
@@ -77,7 +77,7 @@ const setNode = (
 const useInView = ({
   onEnter = ioVoid,
   onLeave = ioVoid,
-  threshold = 0.5,
+  threshold = 0.6,
   unobserveOnEnter = true
 }) => {
   const target = useRef<Element | null>(null)
@@ -89,7 +89,7 @@ const useInView = ({
     return isInView;
   };
 
-  const obsCallback = useCallback<IntersectionObserverCallback>(([entry], observer) => {
+  const intersectionCallback = useCallback<IntersectionObserverCallback>(([entry], observer) => {
     const computations = pipe(
       inViewReader,
       map(setInViewIO),
@@ -102,7 +102,7 @@ const useInView = ({
   const ref = useCallback((node: HTMLElement | null) => {
     const computations = pipe(
       clearObserver(observer, target),
-      io.chain(() => setNode(node, observer, target, obsCallback, threshold))
+      io.chain(() => setNode(node, observer, target, intersectionCallback, threshold))
     );
     computations();
   }, [target, threshold, target, observer]);

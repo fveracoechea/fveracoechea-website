@@ -1,13 +1,15 @@
-import { FC } from 'react';
+import { FC, useCallback } from 'react';
 import useObservable from '../../hooks/useObservable';
 import {
   List, ListItem, useMediaQuery,
   ListItemText, Icon, ListItemIcon, useTheme, Link as MuiLink
 } from '@material-ui/core';
 import { router$, initialState } from '../../service/Router$';
-import { useRouter } from 'next/router';
 import { makeStyles } from '@material-ui/core';
 import Link from 'next/link';
+import { fromPredicate, fold } from 'fp-ts/lib/Option';
+
+const ioVoid = () => {}
 
 type Props = {
   onClose: () => void
@@ -23,9 +25,15 @@ const useStyles = makeStyles(theme => ({
 
 const DrawerList: FC<Props> = ({ onClose }) => {
   const theme = useTheme();
-  const router = useRouter();
   const matches = useMediaQuery(theme.breakpoints.down('sm'));
   const classes = useStyles()
+  const onClickHandler = useCallback(
+    () => fold(
+      ioVoid,
+      onClose
+    )(fromPredicate((m: boolean) => m)(matches)),
+    [onClose, matches]
+  );
   const { value } = useObservable(router$, initialState);
   return (
     <List>
@@ -51,10 +59,7 @@ const DrawerList: FC<Props> = ({ onClose }) => {
             <Link href={route.path} passHref>
               <ListItem
                 button
-                onClick={() => {
-                  if (matches) onClose();
-                  // router.push(route.path);
-                }}
+                onClick={onClickHandler}
                 className={classes.listItem}
               >
                 <ListItemIcon>
