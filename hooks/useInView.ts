@@ -1,7 +1,7 @@
 import { MutableRefObject, useCallback, useRef, useState } from 'react';
 import * as io from 'fp-ts/lib/IO';
 import { pipe } from 'fp-ts/lib/pipeable';
-import { ask, chain, Reader, map } from 'fp-ts/lib/Reader'
+import { chain, Reader, map } from 'fp-ts/lib/Reader'
 import { fromPredicate, fold, fromNullable } from 'fp-ts/lib/Option';
 
 const ioVoid: io.IO<void> = () => {}
@@ -19,7 +19,7 @@ const inViewReader: Reader<Dependencies, boolean> = ({
   observer
 }) => observer.thresholds.some(t => entry.intersectionRatio >= t) && entry.isIntersecting;
 
-const callbackIO = (isInView: boolean): Reader<Dependencies, boolean> => ({ onLeave, onEnter }) => {
+const callbackReader = (isInView: boolean): Reader<Dependencies, boolean> => ({ onLeave, onEnter }) => {
   pipe(
     fromPredicate((inView: boolean) => inView)(isInView),
     fold(
@@ -84,7 +84,7 @@ const useInView = ({
   const observer = useRef<IntersectionObserver | null>(null);
   const [inView, setInView] = useState(false);
 
-  const setInViewIO = (isInView: boolean) => {
+  const setInViewEffect = (isInView: boolean) => {
     setInView(isInView);
     return isInView;
   };
@@ -92,8 +92,8 @@ const useInView = ({
   const intersectionCallback = useCallback<IntersectionObserverCallback>(([entry], observer) => {
     const computations = pipe(
       inViewReader,
-      map(setInViewIO),
-      chain(callbackIO),
+      map(setInViewEffect),
+      chain(callbackReader),
       chain(disconnectReader)
     );
     computations({ entry, observer, unobserveOnEnter, onLeave, onEnter });
