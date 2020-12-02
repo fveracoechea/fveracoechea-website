@@ -10,23 +10,30 @@ import { SkillSection } from '../components/SkillSection';
 import { initializeApollo } from '../service/ApolloClient$';
 import ExperienceSection from '../components/ExperienceSection';
 
-const fetchMainQuery = (apollo: ApolloClient<NormalizedCacheObject>) => async () => {
+const fetchMainQuery = (apollo: ApolloClient<NormalizedCacheObject>): T.Task<{
+  data: MainSectionQuery, apollo: ApolloClient<NormalizedCacheObject>
+}> => async () => {
   const { data } = await apollo.query<MainSectionQuery>({
     query: MainSectionDocument
   });
   return { data, apollo };
 };
 
-export const getServerSideProps = () => pipe(
-  () => Promise.resolve(initializeApollo()),
-  T.chain(fetchMainQuery),
-  T.map(({ data, apollo }) => ({
-    props: {
-      initialApolloState: apollo.cache.extract(),
-      data
-    },
-  }))
-)();
+const initApolloTask: T.Task<ApolloClient<NormalizedCacheObject>> = () => Promise.resolve(initializeApollo());
+
+export async function getServerSideProps() {
+  const computations = await pipe(
+    initApolloTask,
+    T.chain(fetchMainQuery),
+    T.map(({ data, apollo }) => ({
+      props: {
+        initialApolloState: apollo.cache.extract(),
+        data
+      },
+    }))
+  )();
+  return computations;
+};
 
 type Props = {
   data: MainSectionQuery
