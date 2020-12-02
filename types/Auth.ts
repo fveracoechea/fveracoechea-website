@@ -20,7 +20,7 @@ export interface Valid {
 }
 export interface Empty {
   type: 'Empty'
-  token: string,
+  token: '',
 }
 export interface Invalid {
   type: 'Invalid'

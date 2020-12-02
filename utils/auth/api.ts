@@ -4,7 +4,6 @@ import { Authorized, Unauthorized } from '../../types/Auth';
 import * as E from 'fp-ts/lib/Either';
 import { setHttpError, decodeWith, toAuthError } from '../decode';
 import { HttpError } from '../../types/Directus';
-import Url from '../Url';
 
 interface DirectusResponse {
   code?: number,
@@ -42,7 +41,7 @@ const authRequest = <A>(url: string, body: A) => TE.tryCatch(
 );
 
 export const authenticate = () => {
-  const url = Url.concat(process.env.NEXT_PUBLIC_APP_URL!, '/api/authenticate');
+  const url = process.env.NEXT_PUBLIC_APP_URL!.concat(process.env.NEXT_PUBLIC_API_AUTHENTICATE!);
   return pipe(
     authRequest(url, {}),
     TE.chain(decodeWith(Authorized))
@@ -50,7 +49,7 @@ export const authenticate = () => {
 };
 
 export const refresh = (token: string) => {
-  const url = Url.concat(process.env.NEXT_PUBLIC_APP_URL!, '/api/refresh');
+  const url = process.env.NEXT_PUBLIC_APP_URL!.concat(process.env.NEXT_PUBLIC_API_REFRESH!);
   return pipe(
     authRequest(url, { token }),
     TE.chain(decodeWith(Authorized))

@@ -7,36 +7,39 @@ import {
 } from "@apollo/client";
 import { pipe } from 'fp-ts/lib/pipeable';
 import { IO } from 'fp-ts/lib/IO';
+import { Option } from 'fp-ts/lib/Option';
 
 export const apollo$ = new BehaviorSubject<ApolloClient<NormalizedCacheObject> | null>(null);
 
 const setClient = (
   client: ApolloClient<NormalizedCacheObject>
-): IO<ApolloClient<NormalizedCacheObject>> => {
+): IO<Option<ApolloClient<NormalizedCacheObject>>> => {
   return () => {
-    apollo$.next(client);
-    return client;
+    apollo$.next(typeof window === 'undefined' ? null : client);
+    return O.some(client);
   };
+}
+
+const getApollo = () => {
+  return typeof window === 'undefined'
+    ? null
+    : apollo$.getValue()
 }
 
 export const initializeApollo = (
   initialState: NormalizedCacheObject | null = null
 ) => {
   const client = pipe(
-    O.fromNullable(apollo$.getValue()),
+    O.fromNullable(getApollo()),
     O.fold(
       () => createApolloClient(),
       apollo => apollo
     )
   );
-  const saveClient = setClient(client);
   return pipe(
     O.fromNullable(initialState),
     O.map(state => client.cache.restore(state)),
-    O.chain(() => typeof window === 'undefined' ? O.none : O.some(saveClient())),
-    O.fold(
-      () => client,
-      apollo => apollo
-    )
-  )
+    O.chain(setClient(client)),
+    O.getOrElse(() => client)
+  );
 }
