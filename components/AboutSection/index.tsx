@@ -15,6 +15,7 @@ const useStyles = makeStyles(theme => ({
     backgroundImage: 'url("/images/furley_bg.png")',
     backgroundRepeat: 'repeat',
     backgroundAttachment: 'fixed',
+    marginBottom: theme.spacing(2)
   },
   heading: {
     boxShadow: theme.shadows[10],
@@ -23,14 +24,13 @@ const useStyles = makeStyles(theme => ({
     marginBottom: theme.spacing(4)
   },
   bodyHeader: {
-    
+    marginBottom: theme.spacing(2)
   },
   light: {
     color: theme.palette.secondary.light
   },
   bodyText: {
     fontSize: theme.typography.h5.fontSize,
-    
   },
   quote: {
     // paddingLeft: theme.spacing(2),
@@ -89,10 +89,10 @@ const AboutSection: FC<Props> = ({ data }) => {
                 md={6}
                 key={key}
               >
-                <Typography variant="h5" className={clsx(classes.bodyHeader, classes.light)}>
-                  {key}
+                <Typography variant="h5" className={classes.bodyHeader}>
+                  {key.toUpperCase()}
                 </Typography>
-                <Typography variant="body1" className={clsx(classes.bodyText, classes.light)}>
+                <Typography variant="subtitle1">
                   {value}
                 </Typography>
               </Grid>
@@ -102,8 +102,8 @@ const AboutSection: FC<Props> = ({ data }) => {
             item
             md={4}
           >
-            <Typography variant="h5" className={clsx(classes.light)}>
-              Interests
+            <Typography variant="h5" className={classes.bodyHeader}>
+              INTERESTS
             </Typography>
             <List>
               {interests.map(item => (
@@ -122,8 +122,8 @@ const AboutSection: FC<Props> = ({ data }) => {
             item
             md={4}
           >
-            <Typography variant="h5" className={clsx(classes.light)}>
-              Knowledge
+            <Typography variant="h5" className={classes.bodyHeader}>
+              KNOWLEDGE
             </Typography>
             <List>
               {info.map(item => (
@@ -142,8 +142,8 @@ const AboutSection: FC<Props> = ({ data }) => {
             item
             md={4}
           >
-            <Typography variant="h5" className={clsx(classes.light)}>
-              Contact
+            <Typography variant="h5" className={classes.bodyHeader}>
+              CONTACT
             </Typography>
             <List>
               {contact.map(item => (

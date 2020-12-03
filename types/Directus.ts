@@ -51,3 +51,11 @@ export class HttpError extends Error {
     this.statusCode = statusCode;
   }
 }
+
+export type AuthResponse = {
+	statusCode: number;
+	message?: string;
+	code?: number;
+	success: boolean;
+	token?: string;
+};

@@ -7,12 +7,12 @@ import { IO, chain } from 'fp-ts/lib/IO';
 import { pipe } from 'fp-ts/lib/pipeable';
 import * as TE from 'fp-ts/lib/TaskEither';
 import { Authentication } from '../types/Auth';
-import { authenticate, refresh } from './auth/api';
 import * as T from 'fp-ts/lib/Task';
 import { HttpError } from '../types/Directus';
+import { cmsAuthenticate, cmsRefresh } from './auth/cms';
 
 const getUri = (token: string) => process.env.NEXT_PUBLIC_DIRECTUS_GRAPHQL!.concat(`?access_token=${token}`);
-const errorLog = (error: HttpError): IO<void> => () => console.error(error);
+const errorLog = (error: HttpError): IO<void> => () => console.log(error);
 const setToken = (token: string): IO<string> => () => TokenStorage.setToken(token);
 
 const resetToken = onError(({ networkError, forward, operation }) => {
@@ -31,8 +31,8 @@ const resetToken = onError(({ networkError, forward, operation }) => {
 
 const authLink = setContext(() => {
   const validate = Authentication.matchStrict({
-    Empty: () => authenticate(),
-    Invalid: ({ token }) => refresh(token),
+    Empty: () => cmsAuthenticate(),
+    Invalid: ({ token }) => cmsRefresh(token),
     Valid: ({ token }) => TE.of({ token })
   });
   return pipe(

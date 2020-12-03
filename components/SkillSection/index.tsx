@@ -1,5 +1,5 @@
-import { FC, useState } from 'react';
-import { Typography, makeStyles, Container, Grid, fade, IconButton, Icon } from '@material-ui/core';
+import { FC, useState, useRef } from 'react';
+import { Typography, makeStyles, Container, Grid, fade, IconButton, Icon, useMediaQuery, Theme } from '@material-ui/core';
 import { MainSectionQuery } from '../../graphql/index';
 import SkillList from './SkillList';
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext, Image, DotGroup } from 'pure-react-carousel';
@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme) => ({
 		backgroundImage: 'url("/images/furley_bg.png")',
 		backgroundRepeat: 'repeat',
 		backgroundAttachment: 'fixed',
+		paddingBottom: theme.spacing(4)
 	},
 	heading: {
 		boxShadow: theme.shadows[10],
@@ -58,8 +59,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const SkillSection: FC<Props> = ({ data }) => {
+	const matches = useMediaQuery<Theme>(theme => theme.breakpoints.down('sm'));
 	const classes = useStyles();
 	const [isHover, setIsHover] = useState(false);
+	const ref = useRef<HTMLDivElement | null>(null); 
 	return (
 		<section id="skills" className={classes.section}>
 			<div className={classes.heading}>
@@ -70,61 +73,64 @@ export const SkillSection: FC<Props> = ({ data }) => {
 			<Container>
 				<Grid container spacing={4}>
 					<SkillList data={data!} />
-					<Grid item md={12}>
-						<CarouselProvider
-              naturalSlideWidth={1000}
-              naturalSlideHeight={350}
-              totalSlides={data?.carousel?.data?.length || 3}
-              interval={3000}
-              infinite
-              isPlaying
-            >
-							<Slider>
-								{data &&
-									data.carousel &&
-									data!.carousel!.data!.map((item, i) => (
-                    <Slide
-                      index={i}
-                      key={item?.id!}
-                      className={classes.slideWrapper}
-                    >
-											<Image
-												className={classes.sliderImage}
-												hasMasterSpinner
-												src={item?.image.full_url!}
-												alt={item?.title!}
-											/>
-											<div
-                        className={clsx(classes.sliderContent, {
-                          [classes.visibleContent]: isHover
-                        })}
-                        onMouseEnter={() => setIsHover(true)}
-                        onMouseLeave={() => setIsHover(false)}
-                      >
-                        <IconButton component={ButtonBack} color="primary">
-                          <Icon fontSize="large">
-                            chevron_left
-                          </Icon>
-                        </IconButton>
-												<div className={classes.descriptionWrapper}>
-                          <Typography variant="h3" color="textSecondary" style={{ textAlign: 'center' }}>
-                            {item?.title}
-                          </Typography>
-													<Typography variant="subtitle1" color="textSecondary">
-														{item?.description}
-													</Typography>
-												</div>
-                        <IconButton component={ButtonNext} color="primary">
-                          <Icon fontSize="large">
-                            chevron_right
-                          </Icon>
-                        </IconButton>
-											</div>
-										</Slide>
-									))}
-							</Slider>
-							<DotGroup />
-						</CarouselProvider>
+					<Grid item xs={12}>
+						<div ref={ref}>
+							<CarouselProvider
+								naturalSlideWidth={1000}
+								naturalSlideHeight={350}
+								totalSlides={data?.carousel?.data?.length || 3}
+								interval={3000}
+								infinite
+								isPlaying
+							>
+								<Slider>
+									{data &&
+										data.carousel &&
+										data!.carousel!.data!.map((item, i) => (
+											<Slide
+												index={i}
+												key={item?.id!}
+												className={classes.slideWrapper}
+											>
+												<Image
+													className={classes.sliderImage}
+													hasMasterSpinner
+													src={item?.image.full_url!}
+													alt={item?.title!}
+												/>
+												{ 
+													!matches && <div
+														className={clsx(classes.sliderContent, {
+															[classes.visibleContent]: isHover
+														})}
+														onMouseEnter={() => setIsHover(true)}
+														onMouseLeave={() => setIsHover(false)}
+													>
+														<IconButton component={ButtonBack} color="primary">
+															<Icon fontSize="large">
+																chevron_left
+															</Icon>
+														</IconButton>
+														<div className={classes.descriptionWrapper}>
+															<Typography variant="h3" color="textSecondary" style={{ textAlign: 'center' }}>
+																{item?.title}
+															</Typography>
+															<Typography variant="subtitle1" color="textSecondary">
+																{item?.description}
+															</Typography>
+														</div>
+														<IconButton component={ButtonNext} color="primary">
+															<Icon fontSize="large">
+																chevron_right
+															</Icon>
+														</IconButton>
+													</div>
+												}
+											</Slide>
+										))}
+								</Slider>
+							</CarouselProvider>
+						</div>
 					</Grid>
 				</Grid>
 			</Container>

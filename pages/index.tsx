@@ -40,13 +40,29 @@ type Props = {
 }
 
 const Home: FC<Props> = ({ data }) => {
+  const title = data?.main?.data![0]?.title;
+  const subtitle = data?.main?.data![0]?.subtitle;
+  const slogan = data?.main?.data![0]?.slogan;
+  const image = data?.main?.data![0]?.background_image?.full_url;
   return (
     <>
       <Head>
         <meta httpEquiv="Content-Type" content="text/html;charset=UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <meta charSet="UTF-8"/>
-        <title>Francisco Veracoechea - Web Developer</title>
+        <title>{title}</title>
+        <meta name="description" content={`${subtitle} - ${slogan}`} />
+        <meta name="robots" content= "index, follow" />
+
+        <meta property="og:title" content={`${title} - ${subtitle}`} />
+        <meta property="og:url" content="https://fveracoechea.com" />
+        <meta property="og:image" content={image!} />
+        <meta property="og:type" content="website" />
+        <meta property="og:description" content={slogan} />
+        <meta name="twitter:card" content="summary_large_image" />
+
+        <link rel="canonical" href="https://fveracoechea.com" />
+
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <MainSection data={data!} />

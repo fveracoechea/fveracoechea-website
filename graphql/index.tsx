@@ -2,6 +2,8 @@ import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -1454,6 +1456,10 @@ export type Metadata = {
   total_count?: Maybe<Scalars['Int']>;
 };
 
+export type Node = {
+  id?: Maybe<Scalars['ID']>;
+};
+
 export type Query = {
   __typename?: 'Query';
   directus_activity?: Maybe<DirectusActivity>;
@@ -1722,7 +1728,7 @@ export type ExperienceSectionQuery = (
     { __typename?: 'Experience' }
     & { data?: Maybe<Array<Maybe<(
       { __typename?: 'ExperienceItem' }
-      & Pick<ExperienceItem, 'company_name' | 'position' | 'description' | 'website' | 'working_time'>
+      & Pick<ExperienceItem, 'id' | 'company_name' | 'position' | 'description' | 'website' | 'working_time'>
       & { company_logo?: Maybe<(
         { __typename?: 'DirectusFileItem' }
         & Pick<DirectusFileItem, 'full_url'>
@@ -1805,6 +1811,7 @@ export const ExperienceSectionDocument = gql`
     query ExperienceSection {
   experience {
     data {
+      id
       company_name
       company_logo {
         full_url
@@ -1941,20 +1948,14 @@ export type MainSectionQueryHookResult = ReturnType<typeof useMainSectionQuery>;
 export type MainSectionLazyQueryHookResult = ReturnType<typeof useMainSectionLazyQuery>;
 export type MainSectionQueryResult = Apollo.QueryResult<MainSectionQuery, MainSectionQueryVariables>;
 
-      export interface IntrospectionResultData {
-        __schema: {
-          types: {
-            kind: string;
-            name: string;
-            possibleTypes: {
-              name: string;
-            }[];
-          }[];
-        };
+      export interface PossibleTypesResultData {
+        possibleTypes: {
+          [key: string]: string[]
+        }
       }
-      const result: IntrospectionResultData = {
-  "__schema": {
-    "types": []
+      const result: PossibleTypesResultData = {
+  "possibleTypes": {
+    "Node": []
   }
 };
       export default result;

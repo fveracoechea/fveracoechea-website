@@ -1,4 +1,4 @@
-import { Grid, Typography, Button, makeStyles } from '@material-ui/core';
+import { Grid, Typography, Button, makeStyles, useMediaQuery, Theme } from '@material-ui/core';
 import { FC, useMemo } from 'react';
 import { MainSectionQuery, SkillsItem } from '../../graphql/index';
 
@@ -23,6 +23,7 @@ const useStyles = makeStyles(theme => ({
   },
   typeTitle: {
     marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
     position: 'relative',
     display: 'inline-block',
     '&:after': {
@@ -37,7 +38,6 @@ const useStyles = makeStyles(theme => ({
   },
   itemLink: {
     display: 'block',
-    paddingTop: theme.spacing(2),
     color: theme.palette.secondary.main,
   }
 }))
@@ -52,36 +52,31 @@ const groupBy = (key: string) => (array: any[]) =>
 const SkillList: FC<Props> = ({ data }) => {
   const skills = useMemo(() => groupBy('type')(data?.skills?.data! || []), [data]);
   const classes = useStyles();
+  const matches = useMediaQuery<Theme>(theme => theme.breakpoints.down('sm'));
   return (
     <>
       {Object.entries(skills).map(([type, value]) => (
-        <Grid
-          key={type}
-          item
-          md={12}
-        >
-          <Grid container spacing={4}>
-            <Grid item md={12}>
-              <Typography variant="h5" className={classes.typeTitle}>
-                {type.toUpperCase()}
-              </Typography>
-            </Grid>
-            <Grid container>
-              {(value as any).map((item: SkillsItem) => (
-                <Grid
-                  key={item.id}
-                  item
-                  md={2}
-                >
-                  <Button component="a" className={classes.itemLink} href={item.link} target="_blank">
-                    <img className={classes.image} src={item.image.full_url!} alt={item.name} />
-                    <Typography variant="subtitle1" className={classes.itemName}>
-                      {item.name}
-                    </Typography>
-                  </Button>
-                </Grid>
-              ))}
-            </Grid>
+        <Grid container key={type} item md={12} justify={matches ? 'center' : 'flex-start'}>
+          <Typography variant={matches ? 'h4' : 'h5'} className={classes.typeTitle}>
+            {type.toUpperCase()}
+          </Typography>
+          <Grid container item md={12} spacing={4}>
+            {(value as any).map((item: SkillsItem) => (
+              <Grid
+                key={item.id}
+                item
+                xs={6}
+                sm={4}
+                md={2}
+              >
+                <Button component="a" className={classes.itemLink} href={item.link} target="_blank">
+                  <img className={classes.image} src={item.image.full_url!} alt={item.name} />
+                  <Typography variant="subtitle1" className={classes.itemName}>
+                    {item.name}
+                  </Typography>
+                </Button>
+              </Grid>
+            ))}
           </Grid>
         </Grid>
       ))}

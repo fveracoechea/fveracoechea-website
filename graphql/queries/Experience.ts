@@ -4,6 +4,7 @@ export default gql`
   query ExperienceSection {
     experience {
       data {
+        id
         company_name
         company_logo {
           full_url

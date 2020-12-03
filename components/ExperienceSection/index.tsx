@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ExperienceSection: FC<Props> = ({}) => {
-	const [onEnter, { called, loading, data }] = useExperienceSectionLazyQuery();
+  const [onEnter, { called, loading, data }] = useExperienceSectionLazyQuery();
 	const { ref } = useInView({ onEnter });
   const experience = useMemo(() => reverse(data?.experience?.data || []), [data]);
   const matches = useMediaQuery<Theme>(theme => theme.breakpoints.down('md'));
@@ -89,7 +89,7 @@ const ExperienceSection: FC<Props> = ({}) => {
 			</div>
 
 			<Container>
-				<Grid container>
+				<Grid container justify="center">
 					{!called || loading ? (
 						<>
 							<JobLoader />
@@ -97,37 +97,33 @@ const ExperienceSection: FC<Props> = ({}) => {
 						</>
 					) : (
 						experience.map((item) => (
-              <>
-                <Grid item md={2} />
-                <Grid item md={8} className={classes.jobWrapper} component={Paper} elevation={3}>
-                  <Grid item md={12} className={classes.jobHeader}>
-                    <img
-                      className={classes.jobLogo}
-                      src={item?.company_logo?.full_url!}
-                      alt={item?.company_name!}
-                    />
-                  </Grid>
-                  <Grid item md={12} className={classes.jobContent}>
-                    <Typography variant="h6"
-                    >
-                      {item?.position}
-                    </Typography>
-                    <br/>
-                    <Typography variant="body1">
-                      {item?.description}
-                    </Typography>
-                    <div className={classes.jobFooter}>
-                      <Typography variant="subtitle2" color="primary">
-                        <a className={classes.jobLink} href={item?.website!} target="_blank">{item?.website!}</a>
-                      </Typography>
-                      <Typography variant="subtitle2" align={matches ? 'left' : 'right'}>
-                        {item?.working_time}
-                      </Typography>
-                    </div>
-                  </Grid>
+              <Grid item md={8} className={classes.jobWrapper} component={Paper} elevation={3} key={`experience-${item?.id!}`}>
+                <Grid item md={12} className={classes.jobHeader}>
+                  <img
+                    className={classes.jobLogo}
+                    src={item?.company_logo?.full_url!}
+                    alt={item?.company_name!}
+                  />
                 </Grid>
-                <Grid item md={2} />
-              </>
+                <Grid item md={12} className={classes.jobContent}>
+                  <Typography variant="h6"
+                  >
+                    {item?.position}
+                  </Typography>
+                  <br/>
+                  <Typography variant="body1">
+                    {item?.description}
+                  </Typography>
+                  <div className={classes.jobFooter}>
+                    <Typography variant="subtitle2" color="primary">
+                      <a className={classes.jobLink} href={item?.website!} target="_blank">{item?.website!}</a>
+                    </Typography>
+                    <Typography variant="subtitle2" align={matches ? 'left' : 'right'}>
+                      {item?.working_time}
+                    </Typography>
+                  </div>
+                </Grid>
+              </Grid>
 						))
 					)}
 				</Grid>
