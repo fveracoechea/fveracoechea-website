@@ -21,15 +21,16 @@ const fetchMainQuery = (apollo: ApolloClient<NormalizedCacheObject>): T.Task<{
 
 const initApolloTask: T.Task<ApolloClient<NormalizedCacheObject>> = () => Promise.resolve(initializeApollo());
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const computations = await pipe(
     initApolloTask,
     T.chain(fetchMainQuery),
     T.map(({ data, apollo }) => ({
       props: {
         initialApolloState: apollo.cache.extract(),
-        data
+        data,
       },
+      revalidate: 1800,
     }))
   )();
   return computations;
