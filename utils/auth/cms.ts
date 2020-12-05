@@ -55,10 +55,6 @@ export const cmsAuthenticate = () => pipe(
 		},
 		AuthenticateRequest
   ),
-  TE.map(d => {
-    console.log(d);
-    return d;
-  }),
   TE.map(({ data: { token } }) => ({ token }))
 );
 
@@ -68,9 +64,5 @@ export const cmsRefresh = (token: string) => pipe(
     { token },
     RefreshRequest
   ),
-  TE.map(d => {
-    console.log(d);
-    return d;
-  }),
   TE.map(({ data: { token } }) => ({ token })),
 );

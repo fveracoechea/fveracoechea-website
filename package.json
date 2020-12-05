@@ -21,7 +21,7 @@
     "io-ts": "^2.2.10",
     "io-ts-reporters": "^1.2.2",
     "io-ts-types": "^0.5.11",
-    "next": "9.5.3",
+    "next": "latest",
     "pure-react-carousel": "^1.27.6",
     "react": "16.13.1",
     "react-dom": "16.13.1",

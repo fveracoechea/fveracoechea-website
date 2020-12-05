@@ -2,8 +2,9 @@ import { FC, useState, useRef } from 'react';
 import { Typography, makeStyles, Container, Grid, fade, IconButton, Icon, useMediaQuery, Theme } from '@material-ui/core';
 import { MainSectionQuery } from '../../graphql/index';
 import SkillList from './SkillList';
-import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext, Image, DotGroup } from 'pure-react-carousel';
+import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext, DotGroup } from 'pure-react-carousel';
 import clsx from 'clsx';
+import Image from 'next/image';
 
 type Props = {
 	data: MainSectionQuery;
@@ -24,9 +25,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 	sliderImage: {
 		zIndex: 5,
-		objectFit: 'cover',
-		width: '100%',
-		height: '100%',
+		objectPosition: 'center'
 	},
 	slideWrapper: {
 		position: 'relative',
@@ -93,8 +92,8 @@ export const SkillSection: FC<Props> = ({ data }) => {
 												className={classes.slideWrapper}
 											>
 												<Image
+													layout="fill"
 													className={classes.sliderImage}
-													hasMasterSpinner
 													src={item?.image.full_url!}
 													alt={item?.title!}
 												/>
