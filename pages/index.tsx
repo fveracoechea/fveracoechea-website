@@ -2,38 +2,35 @@ import Head from 'next/head'
 import { FC } from 'react';
 import { MainSectionQuery, MainSectionDocument } from '../graphql/index';
 import MainSection from '../components/MainSection';
-import * as T from 'fp-ts/lib/Task';
+import { chain, map, Task } from 'fp-ts/lib/Task';
 import { pipe } from 'fp-ts/lib/pipeable';
-import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import AboutSection from '../components/AboutSection';
 import { SkillSection } from '../components/SkillSection';
-import { initializeApollo } from '../service/ApolloClient$';
 import ExperienceSection from '../components/ExperienceSection';
 
-const fetchMainQuery = (apollo: ApolloClient<NormalizedCacheObject>): T.Task<{
-  data: MainSectionQuery, apollo: ApolloClient<NormalizedCacheObject>
-}> => async () => {
-  const { data } = await apollo.query<MainSectionQuery>({
-    query: MainSectionDocument
-  });
-  return { data, apollo };
-};
-
-const initApolloTask: T.Task<ApolloClient<NormalizedCacheObject>> = () => Promise.resolve(initializeApollo());
+function fetchQuery<A extends { query: Function }>(apollo: A): Task<{ data: MainSectionQuery, apollo: A }> {
+  return async () => {
+    const { data } = await apollo.query({
+      query: MainSectionDocument
+    });
+    return { data, apollo };
+  }
+}
 
 export async function getStaticProps() {
-  const computations = await pipe(
+  const { initializeApollo } = await import('../service/ApolloClient$');
+  const initApolloTask = () => Promise.resolve(initializeApollo());
+  return await pipe(
     initApolloTask,
-    T.chain(fetchMainQuery),
-    T.map(({ data, apollo }) => ({
+    chain(fetchQuery),
+    map(({ data, apollo }) => ({
       props: {
         initialApolloState: apollo.cache.extract(),
         data,
       },
-      revalidate: 1800,
+      revalidate: 10, // 1 sec
     }))
   )();
-  return computations;
 };
 
 type Props = {
@@ -69,7 +66,7 @@ const Home: FC<Props> = ({ data }) => {
       <MainSection data={data!} />
       <AboutSection data={data!} />
       <SkillSection data={data!} />
-      <ExperienceSection />
+      <ExperienceSection data={data!} />
     </>
   )
 }

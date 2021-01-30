@@ -71,5 +71,18 @@ export default gql`
         }
       }
     }
+    experience {
+      data {
+        id
+        company_name
+        company_logo {
+          full_url
+        }
+        position
+        description
+        website
+        working_time
+      }
+    }
   }
 `;

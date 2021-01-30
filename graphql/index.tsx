@@ -1803,6 +1803,16 @@ export type MainSectionQuery = (
         & Pick<DirectusFileItem, 'full_url'>
       ) }
     )>>> }
+  )>, experience?: Maybe<(
+    { __typename?: 'Experience' }
+    & { data?: Maybe<Array<Maybe<(
+      { __typename?: 'ExperienceItem' }
+      & Pick<ExperienceItem, 'id' | 'company_name' | 'position' | 'description' | 'website' | 'working_time'>
+      & { company_logo?: Maybe<(
+        { __typename?: 'DirectusFileItem' }
+        & Pick<DirectusFileItem, 'full_url'>
+      )> }
+    )>>> }
   )> }
 );
 
@@ -1918,6 +1928,19 @@ export const MainSectionDocument = gql`
       image {
         full_url
       }
+    }
+  }
+  experience {
+    data {
+      id
+      company_name
+      company_logo {
+        full_url
+      }
+      position
+      description
+      website
+      working_time
     }
   }
 }

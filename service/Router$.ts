@@ -26,7 +26,13 @@ export const initialState: Route[] = [
     path: '#skills',
     icon: 'code',
     order: 3,
-  }
+  },
+  {
+		name: 'Experience',
+		path: '#experience',
+		icon: 'insights',
+		order: 5,
+	}
 ];
 
 export const router$ = new BehaviorSubject<Route[]>(initialState);
