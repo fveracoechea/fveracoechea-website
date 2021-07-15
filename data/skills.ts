@@ -73,7 +73,7 @@ export const skills = [
   },
   {
     type: 'backend',
-    image: '/public/images/skills/PHP.png',
+    image: '/images/skills/PHP.png',
     link: 'https://www.php.net/',
     name: 'PHP',
   },
