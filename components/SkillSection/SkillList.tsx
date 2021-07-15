@@ -1,14 +1,12 @@
 import {
-  Grid, Typography, Button, makeStyles, useMediaQuery, Theme,
+  Grid, Typography, makeStyles, useMediaQuery, Theme,
   Link
 } from '@material-ui/core';
 import { FC, useMemo } from 'react';
-import { MainSectionQuery, SkillsItem } from '../../graphql/index';
 import Image from 'next/image';
+import { skills as data } from '../../data/skills';
 
-type Props = {
-	data: MainSectionQuery;
-};
+type Props = {};
 
 const useStyles = makeStyles((theme) => ({
 	image: {
@@ -53,8 +51,8 @@ const groupBy = (key: string) => (array: any[]) =>
 		return objectsByKeyValue;
 	}, {});
 
-const SkillList: FC<Props> = ({ data }) => {
-	const skills = useMemo(() => groupBy('type')(data?.skills?.data! || []), [data]);
+const SkillList: FC<Props> = ({}) => {
+	const skills = useMemo(() => groupBy('type')(data), []);
 	const classes = useStyles();
 	const matches = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 	return (
@@ -65,7 +63,7 @@ const SkillList: FC<Props> = ({ data }) => {
 						{type.toUpperCase()}
 					</Typography>
 					<Grid container item md={12} spacing={4}>
-						{(value as any).map((item: SkillsItem) => (
+						{(value as any).map((item: any) => (
 							<Grid key={item.id} item xs={6} sm={4} md={2}>
 								<Link component="a" className={classes.itemLink} href={item.link} target="_blank">
                   <Image
@@ -73,7 +71,7 @@ const SkillList: FC<Props> = ({ data }) => {
                     layout="fixed"
                     height={90}
                     width={90}
-                    src={item.image.full_url!}
+                    src={item.image!}
                     alt={item.name}
                   />
 									<Typography variant="subtitle1" className={classes.itemName}>

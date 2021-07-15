@@ -1,14 +1,8 @@
-import { FC, useState, useRef } from 'react';
-import { Typography, makeStyles, Container, Grid, fade, IconButton, Icon, useMediaQuery, Theme } from '@material-ui/core';
-import { MainSectionQuery } from '../../graphql/index';
+import { FC } from 'react';
+import { Typography, makeStyles, Container, Grid, fade } from '@material-ui/core';
 import SkillList from './SkillList';
-import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext, DotGroup } from 'pure-react-carousel';
-import clsx from 'clsx';
-import Image from 'next/image';
 
-type Props = {
-	data: MainSectionQuery;
-};
+type Props = {};
 
 const useStyles = makeStyles((theme) => ({
 	section: {
@@ -57,11 +51,8 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-export const SkillSection: FC<Props> = ({ data }) => {
-	const matches = useMediaQuery<Theme>(theme => theme.breakpoints.down('sm'));
+export const SkillSection: FC<Props> = ({}) => {
 	const classes = useStyles();
-	const [isHover, setIsHover] = useState(false);
-	const ref = useRef<HTMLDivElement | null>(null); 
 	return (
 		<section id="skills" className={classes.section}>
 			<div className={classes.heading}>
@@ -71,66 +62,7 @@ export const SkillSection: FC<Props> = ({ data }) => {
 			</div>
 			<Container>
 				<Grid container spacing={4}>
-					<SkillList data={data!} />
-					<Grid item xs={12}>
-						<div ref={ref}>
-							<CarouselProvider
-								naturalSlideWidth={1000}
-								naturalSlideHeight={350}
-								totalSlides={data?.carousel?.data?.length || 3}
-								interval={3000}
-								infinite
-								isPlaying
-							>
-								<Slider>
-									{data &&
-										data.carousel &&
-										data!.carousel!.data!.map((item, i) => (
-											<Slide
-												index={i}
-												key={item?.id!}
-												className={classes.slideWrapper}
-											>
-												<Image
-													layout="fill"
-													className={classes.sliderImage}
-													src={item?.image.full_url!}
-													alt={item?.title!}
-												/>
-												{ 
-													!matches && <div
-														className={clsx(classes.sliderContent, {
-															[classes.visibleContent]: isHover
-														})}
-														onMouseEnter={() => setIsHover(true)}
-														onMouseLeave={() => setIsHover(false)}
-													>
-														<IconButton component={ButtonBack} color="primary">
-															<Icon fontSize="large">
-																chevron_left
-															</Icon>
-														</IconButton>
-														<div className={classes.descriptionWrapper}>
-															<Typography variant="h3" color="textSecondary" style={{ textAlign: 'center' }}>
-																{item?.title}
-															</Typography>
-															<Typography variant="subtitle1" color="textSecondary">
-																{item?.description}
-															</Typography>
-														</div>
-														<IconButton component={ButtonNext} color="primary">
-															<Icon fontSize="large">
-																chevron_right
-															</Icon>
-														</IconButton>
-													</div>
-												}
-											</Slide>
-										))}
-								</Slider>
-							</CarouselProvider>
-						</div>
-					</Grid>
+					<SkillList />
 				</Grid>
 			</Container>
 		</section>

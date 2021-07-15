@@ -1,14 +1,13 @@
 import { FC } from 'react';
-import { MainSectionQuery } from '../../graphql/index';
 import {
   Typography, makeStyles, Container, Grid, fade,
   List, ListItem, ListItemIcon, ListItemText, Icon,
 } from '@material-ui/core';
 import clsx from 'clsx';
+import data from '../../data/homepage';
+import { generateKey } from '../../utils/string';
 
-type Props = {
-  data: MainSectionQuery
-}
+type Props = {}
 
 const useStyles = makeStyles(theme => ({
   section: {
@@ -57,14 +56,44 @@ const useStyles = makeStyles(theme => ({
       width: '51%'
     },
   }
-}))
+}));
 
-const AboutSection: FC<Props> = ({ data }) => {
+type InfoProps = {
+  title: string,
+  data: {
+    icon: string,
+    text: string
+  }[];
+}
+const AditionalInfo: FC<InfoProps> = ({ data, title }) => {
   const classes = useStyles();
-  const about_me = data?.about_me!.data![0]!;
-  const interests = data?.interests?.data!;
-  const info = data?.information?.data!;
-  const contact = data?.contact?.data!;
+  return (
+    <Grid
+      item
+      md={4}
+    >
+      <Typography variant="h5" className={classes.bodyHeader}>
+        {title.toUpperCase()}
+      </Typography>
+      <List>
+        {data.map(item => (
+          <ListItem key={generateKey(item.icon)}>
+            <ListItemIcon>
+              <Icon>
+                {item.icon}
+              </Icon>
+            </ListItemIcon>
+            <ListItemText primary={item.text} />
+          </ListItem>
+        ))}
+      </List>
+    </Grid>
+  )
+};
+
+const AboutSection: FC<Props> = () => {
+  const classes = useStyles();
+  const about_me = data.about_me;
   return (
     <section id="about_me" className={classes.section}>
       <div className={classes.heading}>
@@ -83,81 +112,24 @@ const AboutSection: FC<Props> = ({ data }) => {
             </Typography>
           </Grid>
           {
-            Object.entries<string>(about_me?.descriptions).map(([key, value]) => (
+            about_me.descriptions.map(({ title, content }) => (
               <Grid
                 item
                 md={6}
-                key={key}
+                key={generateKey(title)}
               >
                 <Typography variant="h5" className={classes.bodyHeader}>
-                  {key.toUpperCase()}
+                  {title.toUpperCase()}
                 </Typography>
                 <Typography variant="subtitle1">
-                  {value}
+                  {content}
                 </Typography>
               </Grid>
             ))
           }
-          <Grid
-            item
-            md={4}
-          >
-            <Typography variant="h5" className={classes.bodyHeader}>
-              INTERESTS
-            </Typography>
-            <List>
-              {interests.map(item => (
-                <ListItem button key={item!.id}>
-                  <ListItemIcon>
-                    <Icon>
-                      {item?.icon}
-                    </Icon>
-                  </ListItemIcon>
-                  <ListItemText primary={item?.name} />
-                </ListItem>
-              ))}
-            </List>
-          </Grid>
-          <Grid
-            item
-            md={4}
-          >
-            <Typography variant="h5" className={classes.bodyHeader}>
-              KNOWLEDGE
-            </Typography>
-            <List>
-              {info.map(item => (
-                <ListItem key={item!.id}>
-                  <ListItemIcon>
-                    <Icon>
-                      {item?.icon}
-                    </Icon>
-                  </ListItemIcon>
-                  <ListItemText primary={item?.text} />
-                </ListItem>
-              ))}
-            </List>
-          </Grid>
-          <Grid
-            item
-            md={4}
-          >
-            <Typography variant="h5" className={classes.bodyHeader}>
-              CONTACT
-            </Typography>
-            <List>
-              {contact.map(item => (
-                <ListItem key={item!.id}>
-                  <ListItemIcon>
-                    <Icon>
-                      {item?.icon}
-                    </Icon>
-                  </ListItemIcon>
-                  <ListItemText primary={item?.info} />
-                </ListItem>
-              ))}
-            </List>
-          </Grid>
+          <AditionalInfo title="interests" data={about_me.interests}  />
+          <AditionalInfo title="knowledge" data={about_me.knowledge}  />
+          <AditionalInfo title="contact" data={about_me.contact}  />
         </Grid>
       </Container>
     </section>
