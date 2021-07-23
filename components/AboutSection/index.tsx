@@ -6,14 +6,13 @@ import {
 import clsx from 'clsx';
 import data from '../../data/homepage';
 import { generateKey } from '../../utils/string';
+import { backgroundPattern } from '../../utils/styles/flexbox';
 
 type Props = {}
 
 const useStyles = makeStyles(theme => ({
   section: {
-    backgroundImage: 'url("/images/furley_bg.png")',
-    backgroundRepeat: 'repeat',
-    backgroundAttachment: 'fixed',
+    ...backgroundPattern,
     marginBottom: theme.spacing(2)
   },
   heading: {

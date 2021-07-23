@@ -1,14 +1,13 @@
 import { FC } from 'react';
 import { Typography, makeStyles, Container, Grid, fade } from '@material-ui/core';
 import SkillList from './SkillList';
+import { backgroundPattern } from '../../utils/styles/flexbox';
 
 type Props = {};
 
 const useStyles = makeStyles((theme) => ({
 	section: {
-		backgroundImage: 'url("/images/furley_bg.png")',
-		backgroundRepeat: 'repeat',
-		backgroundAttachment: 'fixed',
+		...backgroundPattern,
 		paddingBottom: theme.spacing(4)
 	},
 	heading: {
