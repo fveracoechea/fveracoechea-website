@@ -23,17 +23,12 @@ export const initialState: Route[] = [
     order: 2,
   },
   {
-    name: "Skills",
-    path: "/#skills",
-    icon: "code",
+    name: "Blog",
+    path: "/blog",
+    icon: "edit_note",
     order: 3,
   },
-  {
-    name: "Experience",
-    path: "/#experience",
-    icon: "insights",
-    order: 4,
-  },
+  
   {
     name: "Resume",
     path: data.main.resume_url,

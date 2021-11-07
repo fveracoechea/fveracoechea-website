@@ -1,9 +1,6 @@
 import Head from 'next/head';
 import { FC } from 'react';
-import MainSection from '../components/MainSection';
-import AboutSection from '../components/AboutSection';
-import { SkillSection } from '../components/SkillSection';
-import ExperienceSection from '../components/ExperienceSection';
+import ComingSoon from '../components/MainSection/ComingSoon';
 import data from '../data/homepage';
 
 const Home: FC<{}> = () => {
@@ -33,8 +30,7 @@ const Home: FC<{}> = () => {
 
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
-			<MainSection />
-			<AboutSection />
+			<ComingSoon />
 		</>
 	);
 };

@@ -6,7 +6,7 @@ export const flexCenter = () => ({
 
 
 export const backgroundPattern = {
-  backgroundImage: 'url("/images/squares.png")',
+  backgroundImage: 'url("/images/wool.png")',
   backgroundRepeat: 'repeat',
   // backgroundAttachment: 'fixed',
 };
